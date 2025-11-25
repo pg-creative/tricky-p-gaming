@@ -1,0 +1,263 @@
+---
+/**
+ * DiscordWidget.astro
+ *
+ * Discord server preview widget showing server info,
+ * channel preview, and join button.
+ *
+ * Features:
+ * - Discord branding colors
+ * - Server stats display
+ * - Channel list preview
+ * - Prominent join button
+ */
+
+interface Props {
+  serverName?: string;
+  memberCount?: number;
+  onlineCount?: number;
+}
+
+const {
+  serverName = 'Tricky P Gaming',
+  memberCount = 1247,
+  onlineCount = 342
+} = Astro.props;
+
+// Sample channel list for preview
+const channels = [
+  { name: 'announcements', type: 'text' },
+  { name: 'general-chat', type: 'text' },
+  { name: 'gaming-discussion', type: 'text' },
+  { name: 'voice-lounge', type: 'voice' },
+  { name: 'co-op-sessions', type: 'voice' }
+];
+---
+
+<div class="discord-widget">
+  <!-- Server Header -->
+  <div class="discord-header">
+    <div class="server-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+      </svg>
+    </div>
+    <div class="server-info">
+      <h3 class="server-name">{serverName}</h3>
+      <div class="server-stats">
+        <span class="stat">
+          <span class="online-dot"></span>
+          {onlineCount} Online
+        </span>
+        <span class="stat-divider">•</span>
+        <span class="stat">
+          {memberCount} Members
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channel List Preview -->
+  <div class="channel-list">
+    <div class="channel-header">
+      <span class="channel-header-text">Channels Preview</span>
+    </div>
+    {channels.map(channel => (
+      <div class="channel-item">
+        <span class="channel-icon">
+          {channel.type === 'text' ? '#' : '🔊'}
+        </span>
+        <span class="channel-name">{channel.name}</span>
+      </div>
+    ))}
+  </div>
+
+  <!-- Join Button -->
+  <a href="https://discord.gg/trickypgaming" class="discord-join-btn" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+    </svg>
+    Join Discord Server
+  </a>
+</div>
+
+<style>
+  .discord-widget {
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    color: white;
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
+    max-width: 400px;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .discord-widget:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(88, 101, 242, 0.4);
+  }
+
+  /* Server Header */
+  .discord-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .server-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .server-icon svg {
+    width: 36px;
+    height: 36px;
+    color: white;
+  }
+
+  .server-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .server-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-xs) 0;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .server-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .online-dot {
+    width: 8px;
+    height: 8px;
+    background: #3ba55d;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .stat-divider {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Channel List */
+  .channel-list {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .channel-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.05em;
+  }
+
+  .channel-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    cursor: pointer;
+  }
+
+  .channel-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .channel-icon {
+    font-size: 1.125rem;
+    width: 20px;
+    text-align: center;
+  }
+
+  .channel-name {
+    flex: 1;
+  }
+
+  /* Join Button */
+  .discord-join-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-md);
+    background: white;
+    color: #5865f2;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    border: none;
+    cursor: pointer;
+  }
+
+  .discord-join-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .discord-join-btn:hover {
+    background: #f0f0f0;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .discord-join-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .discord-widget {
+      max-width: 100%;
+    }
+
+    .server-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .server-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .server-name {
+      font-size: 1.125rem;
+    }
+  }
+</style>

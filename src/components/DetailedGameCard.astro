@@ -1,0 +1,327 @@
+---
+/**
+ * DetailedGameCard Component
+ * Large, feature-rich game card for the games library page
+ * Shows more information than the simple GameCard
+ */
+
+interface Props {
+  title: string;
+  genre: string[];
+  platforms: string[];
+  playTime: number;
+  rating: number;
+  status: 'playing' | 'completed' | 'backlog';
+  completion: number;
+  deaths?: number;
+  achievements?: number;
+  totalAchievements?: number;
+  slug: string;
+  colorScheme: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+}
+
+const {
+  title,
+  genre,
+  platforms,
+  playTime,
+  rating,
+  status,
+  completion,
+  deaths,
+  achievements,
+  totalAchievements,
+  slug,
+  colorScheme
+} = Astro.props;
+
+// Format status text
+const statusText = status === 'playing' ? 'Currently Playing' :
+                   status === 'completed' ? 'Completed' : 'Backlog';
+
+// Status color
+const statusColor = status === 'playing' ? '#00D9FF' :
+                    status === 'completed' ? '#00FF88' : '#FFB800';
+---
+
+<a href={`/games/${slug}`} class="detailed-game-card">
+  <div class="card-inner" style={`--card-primary: ${colorScheme.primary}; --card-secondary: ${colorScheme.secondary}; --card-accent: ${colorScheme.accent};`}>
+    <!-- Status Badge -->
+    <div class="status-badge" style={`background: ${statusColor}20; border-color: ${statusColor}; color: ${statusColor};`}>
+      {statusText}
+    </div>
+
+    <!-- Game Title -->
+    <h3 class="game-title">{title}</h3>
+
+    <!-- Genre Tags -->
+    <div class="genre-tags">
+      {genre.map(g => (
+        <span class="genre-tag">{g}</span>
+      ))}
+    </div>
+
+    <!-- Platforms -->
+    <div class="platforms">
+      {platforms.map(platform => (
+        <span class="platform-icon">{platform}</span>
+      ))}
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-value">{rating}/10</div>
+        <div class="stat-label">Rating</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{playTime}h</div>
+        <div class="stat-label">Play Time</div>
+      </div>
+      {deaths && (
+        <div class="stat">
+          <div class="stat-value">{deaths.toLocaleString()}</div>
+          <div class="stat-label">Deaths</div>
+        </div>
+      )}
+      {achievements && totalAchievements && (
+        <div class="stat">
+          <div class="stat-value">{achievements}/{totalAchievements}</div>
+          <div class="stat-label">Achievements</div>
+        </div>
+      )}
+    </div>
+
+    <!-- Completion Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Completion</span>
+        <span class="progress-percent">{completion}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style={`width: ${Math.min(completion, 100)}%;`}></div>
+      </div>
+    </div>
+
+    <!-- View Details Link -->
+    <div class="view-details">
+      View Full Details →
+    </div>
+  </div>
+</a>
+
+<style>
+  .detailed-game-card {
+    display: block;
+    text-decoration: none;
+    height: 100%;
+  }
+
+  .card-inner {
+    background: var(--bg-surface);
+    border: 2px solid var(--card-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    position: relative;
+    overflow: hidden;
+
+    /* Gradient background based on game color */
+    background: linear-gradient(
+      135deg,
+      var(--bg-surface) 0%,
+      color-mix(in srgb, var(--card-primary) 10%, var(--bg-surface)) 100%
+    );
+
+    box-shadow:
+      0 0 20px color-mix(in srgb, var(--card-primary) 20%, transparent),
+      0 4px 12px rgba(0, 0, 0, 0.3);
+
+    transition: all var(--transition-normal);
+  }
+
+  .detailed-game-card:hover .card-inner {
+    transform: translateY(-8px);
+    border-color: var(--card-accent);
+    box-shadow:
+      0 0 40px color-mix(in srgb, var(--card-accent) 40%, transparent),
+      0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Subtle accent line at top */
+  .card-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--card-primary),
+      var(--card-secondary),
+      var(--card-accent)
+    );
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid;
+    align-self: flex-start;
+  }
+
+  .game-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    background: linear-gradient(
+      135deg,
+      var(--text-primary),
+      var(--card-accent)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .genre-tag {
+    padding: 0.25rem 0.75rem;
+    background: color-mix(in srgb, var(--card-primary) 20%, transparent);
+    border: 1px solid color-mix(in srgb, var(--card-primary) 40%, transparent);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .platform-icon {
+    padding: 0.25rem 0.5rem;
+    background: color-mix(in srgb, var(--accent-cyan) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-cyan) 30%, transparent);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    color: var(--accent-cyan);
+    font-weight: 500;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--card-accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .progress-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .progress-percent {
+    font-weight: 700;
+    color: var(--card-accent);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--card-primary),
+      var(--card-accent)
+    );
+    border-radius: var(--radius-full);
+    transition: width 0.6s ease-out;
+    box-shadow: 0 0 10px var(--card-accent);
+  }
+
+  .view-details {
+    margin-top: auto;
+    padding-top: var(--spacing-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--card-accent);
+    text-align: right;
+    opacity: 0.8;
+    transition: opacity var(--transition-normal);
+  }
+
+  .detailed-game-card:hover .view-details {
+    opacity: 1;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card-inner {
+      padding: var(--spacing-md);
+    }
+
+    .game-title {
+      font-size: 1.5rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

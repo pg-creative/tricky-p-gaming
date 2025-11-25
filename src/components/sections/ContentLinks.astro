@@ -1,0 +1,198 @@
+---
+/* ContentLinks.astro
+   Large clickable cards for YouTube and Twitch channels
+   - Responsive layout: side-by-side on desktop, stacked on mobile
+   - Gradient backgrounds with glow effects
+   - Hover animations for engagement */
+---
+
+<section class="content-links section">
+  <div class="container">
+    <h2 class="section-heading">Watch Me Play</h2>
+
+    <div class="cards-container">
+      <!-- YouTube Card -->
+      <a href="#" class="content-card youtube-card">
+        <div class="card-icon">📺</div>
+        <h3 class="card-title">Subscribe on YouTube</h3>
+        <p class="card-description">Full playthroughs, boss guides, and game reviews</p>
+        <div class="card-shine"></div>
+      </a>
+
+      <!-- Twitch Card -->
+      <a href="#" class="content-card twitch-card">
+        <div class="card-icon">🎮</div>
+        <h3 class="card-title">Watch Live on Twitch</h3>
+        <p class="card-description">Join me live for epic adventures and chill gaming</p>
+        <div class="card-shine"></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Section Styling */
+  .content-links {
+    position: relative;
+  }
+
+  .section-heading {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    /* Add gradient effect to heading */
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Cards Container - Flexbox for side-by-side layout */
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: var(--spacing-lg); /* Space between cards */
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* Individual Card Styling */
+  .content-card {
+    /* Position relative for absolute children (shine effect) */
+    position: relative;
+
+    /* Size */
+    min-height: 200px;
+    padding: var(--spacing-xl);
+
+    /* Layout - Flexbox to center content */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--spacing-sm);
+
+    /* Border and shape */
+    border-radius: var(--radius-lg);
+    overflow: hidden; /* Contain the shine effect */
+
+    /* Smooth transitions for hover effects */
+    transition: transform var(--transition-normal),
+                box-shadow var(--transition-normal);
+
+    /* Remove default link underline */
+    text-decoration: none;
+
+    /* Ensure text is readable on gradient backgrounds */
+    color: var(--text-primary);
+
+    /* Cursor indicates it's clickable */
+    cursor: pointer;
+  }
+
+  /* YouTube Card - Purple gradient */
+  .youtube-card {
+    background: linear-gradient(135deg, #9d4edd 0%, #6b2fa8 100%);
+    box-shadow: 0 8px 32px rgba(157, 78, 221, 0.4);
+  }
+
+  /* Twitch Card - Cyan gradient */
+  .twitch-card {
+    background: linear-gradient(135deg, #00d9ff 0%, #0094b8 100%);
+    box-shadow: 0 8px 32px rgba(0, 217, 255, 0.4);
+  }
+
+  /* Hover Effects - Scale up and intensify glow */
+  .content-card:hover {
+    transform: scale(1.05);
+  }
+
+  .youtube-card:hover {
+    box-shadow: 0 12px 48px rgba(157, 78, 221, 0.6);
+  }
+
+  .twitch-card:hover {
+    box-shadow: 0 12px 48px rgba(0, 217, 255, 0.6);
+  }
+
+  /* Card Icon - Large emoji */
+  .card-icon {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  /* Card Title */
+  .card-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  /* Card Description */
+  .card-description {
+    font-size: 1rem;
+    color: rgba(232, 241, 255, 0.9); /* Slightly transparent white */
+    margin: 0;
+    max-width: 300px;
+  }
+
+  /* Shine Effect - Subtle gradient overlay for depth */
+  .card-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    pointer-events: none; /* Don't block clicks */
+    opacity: 0.5;
+    transition: opacity var(--transition-normal);
+  }
+
+  /* Intensify shine on hover */
+  .content-card:hover .card-shine {
+    opacity: 0.8;
+  }
+
+  /* Responsive Design - Stack cards on mobile */
+  @media (max-width: 768px) {
+    .cards-container {
+      grid-template-columns: 1fr; /* Single column on mobile */
+      gap: var(--spacing-md);
+    }
+
+    .content-card {
+      min-height: 180px;
+      padding: var(--spacing-lg);
+    }
+
+    .card-icon {
+      font-size: 3rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+    }
+
+    .card-description {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Focus styles for accessibility - keyboard navigation */
+  .content-card:focus {
+    outline: 3px solid var(--accent-cyan);
+    outline-offset: 4px;
+  }
+
+  /* Active state - when clicking */
+  .content-card:active {
+    transform: scale(1.02);
+  }
+</style>

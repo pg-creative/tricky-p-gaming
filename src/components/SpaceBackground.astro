@@ -1,0 +1,163 @@
+---
+// SpaceBackground.astro
+// Animated deep space nebula background with layered gradients
+// Creates an ethereal, colorful cosmic atmosphere
+---
+
+<div class="space-background">
+  <div class="nebula-layer nebula-1"></div>
+  <div class="nebula-layer nebula-2"></div>
+  <div class="nebula-layer nebula-3"></div>
+  <div class="cosmic-dust"></div>
+</div>
+
+<style>
+  .space-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #0a0b1e, #1a1b3e, #0a0e27);
+  }
+
+  .nebula-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    mix-blend-mode: screen;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  /* Purple nebula - upper left */
+  .nebula-1 {
+    background: radial-gradient(
+      ellipse at 20% 30%,
+      rgba(139, 92, 246, 0.4) 0%,
+      rgba(139, 92, 246, 0.2) 25%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 70%,
+      rgba(167, 139, 250, 0.3) 0%,
+      rgba(167, 139, 250, 0.1) 30%,
+      transparent 55%
+    );
+    animation: nebulaDrift1 20s ease-in-out infinite alternate;
+  }
+
+  /* Blue-cyan nebula - lower right */
+  .nebula-2 {
+    background: radial-gradient(
+      ellipse at 70% 60%,
+      rgba(96, 165, 250, 0.4) 0%,
+      rgba(96, 165, 250, 0.2) 25%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 30% 80%,
+      rgba(34, 211, 238, 0.3) 0%,
+      rgba(34, 211, 238, 0.1) 30%,
+      transparent 55%
+    );
+    animation: nebulaDrift2 25s ease-in-out infinite alternate;
+  }
+
+  /* Magenta-purple nebula - center */
+  .nebula-3 {
+    background: radial-gradient(
+      ellipse at 50% 50%,
+      rgba(192, 132, 252, 0.35) 0%,
+      rgba(192, 132, 252, 0.15) 20%,
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 40% 20%,
+      rgba(168, 85, 247, 0.3) 0%,
+      rgba(168, 85, 247, 0.1) 25%,
+      transparent 50%
+    );
+    animation: nebulaDrift3 30s ease-in-out infinite alternate;
+  }
+
+  /* Cosmic dust - adds texture and depth */
+  .cosmic-dust {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.15), transparent),
+      radial-gradient(2px 2px at 60% 70%, rgba(139, 92, 246, 0.1), transparent),
+      radial-gradient(3px 3px at 50% 50%, rgba(96, 165, 250, 0.1), transparent),
+      radial-gradient(2px 2px at 80% 10%, rgba(192, 132, 252, 0.1), transparent),
+      radial-gradient(2px 2px at 90% 60%, rgba(255, 255, 255, 0.1), transparent);
+    background-size: 200px 200px, 300px 300px, 250px 250px, 350px 350px, 280px 280px;
+    background-position: 0 0, 50px 60px, 130px 270px, 70px 100px, 250px 30px;
+    opacity: 0.3;
+    animation: dustFloat 60s linear infinite;
+  }
+
+  /* Nebula drift animations - subtle movement */
+  @keyframes nebulaDrift1 {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate(-30px, 20px) scale(1.05);
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes nebulaDrift2 {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate(40px, -25px) scale(1.08);
+      opacity: 0.65;
+    }
+  }
+
+  @keyframes nebulaDrift3 {
+    0% {
+      transform: translate(0, 0) scale(1) rotate(0deg);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate(-20px, -30px) scale(1.1) rotate(2deg);
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes dustFloat {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-100px, -100px);
+    }
+  }
+
+  /* Performance optimization - use GPU acceleration */
+  .nebula-layer,
+  .cosmic-dust {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Reduce motion for users who prefer less animation */
+  @media (prefers-reduced-motion: reduce) {
+    .nebula-layer,
+    .cosmic-dust {
+      animation: none;
+    }
+  }
+</style>

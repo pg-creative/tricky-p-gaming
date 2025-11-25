@@ -1,0 +1,375 @@
+---
+/*
+  FeaturedGame.astro - Hero-style Featured Game Section
+
+  Large, immersive showcase of the current game being played.
+  Features:
+  - 2-column layout (image + content)
+  - Gradient background matching game aesthetic
+  - Play stats and progress
+  - CTA to full review
+*/
+
+interface PlayStats {
+  hoursPlayed: string;
+  progress: string;
+  difficulty: string;
+  status: string;
+}
+
+interface FeaturedGameData {
+  title: string;
+  tagline: string;
+  description: string;
+  gradientFrom: string;
+  gradientTo: string;
+  stats: PlayStats;
+  reviewUrl?: string;
+}
+
+// Currently featured game - easily update this
+const featuredGame: FeaturedGameData = {
+  title: "Elden Ring",
+  tagline: "The Lands Between await",
+  description: "Currently embarking on an epic journey through the Lands Between. FromSoftware's masterpiece combines brutal combat, stunning open-world exploration, and cryptic lore that keeps pulling me back for one more try. Every boss is a test of patience, skill, and determination.",
+  gradientFrom: "#1a0f0f",
+  gradientTo: "#2d1810",
+  stats: {
+    hoursPlayed: "147",
+    progress: "68%",
+    difficulty: "Quality Build",
+    status: "Mountaintops of the Giants"
+  },
+  reviewUrl: "/reviews/elden-ring"
+};
+---
+
+<section class="featured-game-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="badge">Currently Playing</span>
+      <h2 class="section-title">Featured Adventure</h2>
+    </div>
+
+    <div class="featured-game-card">
+      <!-- Game Image/Visual -->
+      <div class="game-visual">
+        <div class="image-placeholder">
+          <div class="game-icon">🗡️</div>
+          <div class="glow-effect"></div>
+        </div>
+      </div>
+
+      <!-- Game Content -->
+      <div class="game-content">
+        <h3 class="game-title">{featuredGame.title}</h3>
+        <p class="game-tagline">{featuredGame.tagline}</p>
+        <p class="game-description">{featuredGame.description}</p>
+
+        <!-- Play Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-info">
+              <span class="stat-label">Hours Played</span>
+              <span class="stat-value">{featuredGame.stats.hoursPlayed}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+              <span class="stat-label">Progress</span>
+              <span class="stat-value">{featuredGame.stats.progress}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon">⚔️</div>
+            <div class="stat-info">
+              <span class="stat-label">Build</span>
+              <span class="stat-value">{featuredGame.stats.difficulty}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-info">
+              <span class="stat-label">Location</span>
+              <span class="stat-value">{featuredGame.stats.status}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        {featuredGame.reviewUrl && (
+          <a href={featuredGame.reviewUrl} class="cta-button">
+            Read Full Review
+            <span class="arrow">→</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style define:vars={{ gradientFrom: featuredGame.gradientFrom, gradientTo: featuredGame.gradientTo }}>
+  .featured-game-section {
+    padding: var(--spacing-2xl) 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    color: var(--bg-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 50px;
+    margin-bottom: var(--spacing-sm);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+  }
+
+  .featured-game-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--gradientFrom), var(--gradientTo));
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 0 40px rgba(0, 217, 255, 0.2),
+      0 10px 50px rgba(0, 0, 0, 0.5);
+    transition: all var(--transition-normal);
+  }
+
+  .featured-game-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 0 60px rgba(0, 217, 255, 0.4),
+      0 20px 60px rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 217, 255, 0.6);
+  }
+
+  /* Game Visual Section */
+  .game-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .image-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at center, rgba(0, 217, 255, 0.1), transparent);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+  }
+
+  .featured-game-card:hover .image-placeholder {
+    border-color: rgba(0, 217, 255, 0.6);
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
+  }
+
+  .game-icon {
+    font-size: 8rem;
+    filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.5));
+    animation: float 6s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  .glow-effect {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.3), transparent);
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  /* Game Content Section */
+  .game-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .game-title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-neon));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .game-tagline {
+    font-size: 1.25rem;
+    color: var(--accent-cyan);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .game-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: rgba(0, 217, 255, 0.05);
+    border: 1px solid rgba(0, 217, 255, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    transition: all var(--transition-normal);
+  }
+
+  .stat-item:hover {
+    background: rgba(0, 217, 255, 0.1);
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateX(5px);
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+  }
+
+  .stat-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* CTA Button */
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    color: var(--bg-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    margin-top: var(--spacing-md);
+    width: fit-content;
+    transition: all var(--transition-normal);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+  }
+
+  .cta-button:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
+    color: var(--bg-primary);
+  }
+
+  .arrow {
+    transition: transform var(--transition-normal);
+  }
+
+  .cta-button:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 968px) {
+    .featured-game-card {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xl);
+      padding: var(--spacing-xl);
+    }
+
+    .game-icon {
+      font-size: 6rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .featured-game-card {
+      padding: var(--spacing-lg);
+    }
+
+    .game-icon {
+      font-size: 4rem;
+    }
+
+    .stats-grid {
+      gap: var(--spacing-sm);
+    }
+
+    .stat-item {
+      padding: var(--spacing-sm);
+    }
+  }
+</style>

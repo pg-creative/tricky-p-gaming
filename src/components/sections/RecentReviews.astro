@@ -1,0 +1,422 @@
+---
+/*
+  RecentReviews.astro - Horizontal Scrolling Review Carousel
+
+  Features:
+  - Horizontal scrolling carousel
+  - Review cards with game image, title, rating, quote
+  - Smooth scroll behavior
+  - Links to full reviews
+*/
+
+interface Review {
+  game: string;
+  rating: number;
+  quote: string;
+  icon: string;
+  gradientFrom: string;
+  gradientTo: string;
+  url: string;
+}
+
+const recentReviews: Review[] = [
+  {
+    game: "Elden Ring",
+    rating: 5,
+    quote: "A masterpiece that redefines open-world design. Every corner hides a secret, every boss is a lesson in perseverance.",
+    icon: "🗡️",
+    gradientFrom: "#1a0f0f",
+    gradientTo: "#2d1810",
+    url: "/reviews/elden-ring"
+  },
+  {
+    game: "Hollow Knight",
+    rating: 5,
+    quote: "Team Cherry's magnum opus. The atmosphere, combat, and exploration create a metroidvania that's truly unforgettable.",
+    icon: "🦋",
+    gradientFrom: "#0f1a1a",
+    gradientTo: "#102d28",
+    url: "/reviews/hollow-knight"
+  },
+  {
+    game: "Baldur's Gate 3",
+    rating: 5,
+    quote: "Larian Studios delivered the ultimate D&D experience. Every choice matters, every companion feels alive.",
+    icon: "🎲",
+    gradientFrom: "#1a0f1a",
+    gradientTo: "#2d1028",
+    url: "/reviews/baldurs-gate-3"
+  },
+  {
+    game: "Dark Souls III",
+    rating: 5,
+    quote: "The pinnacle of Souls combat. Fast, fluid, and brutally fair. Every death is a lesson, every victory is earned.",
+    icon: "🔥",
+    gradientFrom: "#1f1410",
+    gradientTo: "#3d2018",
+    url: "/reviews/dark-souls-3"
+  },
+  {
+    game: "Lies of P",
+    rating: 4.5,
+    quote: "A soulslike that stands on its own. The Pinocchio setting is brilliant, and the combat feels incredibly tight.",
+    icon: "🤥",
+    gradientFrom: "#14141f",
+    gradientTo: "#201838",
+    url: "/reviews/lies-of-p"
+  },
+  {
+    game: "Hades",
+    rating: 5,
+    quote: "Supergiant's roguelike perfection. Addictive gameplay loop meets incredible storytelling and phenomenal voice acting.",
+    icon: "⚡",
+    gradientFrom: "#1f0f0f",
+    gradientTo: "#3d1818",
+    url: "/reviews/hades"
+  }
+];
+
+// Function to render star rating
+function renderStars(rating: number): string {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  let stars = '★'.repeat(fullStars);
+  if (hasHalfStar) stars += '½';
+  return stars;
+}
+---
+
+<section class="reviews-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Recent Reviews</h2>
+      <p class="section-subtitle">My honest takes on the games I've played</p>
+    </div>
+
+    <div class="carousel-container">
+      <div class="reviews-carousel">
+        {recentReviews.map((review) => (
+          <article class="review-card" style={`--gradient-from: ${review.gradientFrom}; --gradient-to: ${review.gradientTo}`}>
+            <a href={review.url} class="review-link">
+              {/* Game Visual */}
+              <div class="review-visual">
+                <div class="game-icon">{review.icon}</div>
+                <div class="visual-glow"></div>
+              </div>
+
+              {/* Review Content */}
+              <div class="review-content">
+                <h3 class="game-title">{review.game}</h3>
+
+                <div class="rating">
+                  <span class="stars">{renderStars(review.rating)}</span>
+                  <span class="rating-number">{review.rating}/5</span>
+                </div>
+
+                <blockquote class="review-quote">
+                  <p>"{review.quote}"</p>
+                </blockquote>
+
+                <div class="read-review">
+                  Read Full Review
+                  <span class="arrow">→</span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      {/* Scroll Indicators */}
+      <div class="scroll-hint">
+        <span>← Scroll to explore →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews-section {
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(20, 27, 61, 0.3),
+      transparent
+    );
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  /* Carousel Container */
+  .carousel-container {
+    position: relative;
+  }
+
+  .reviews-carousel {
+    display: flex;
+    gap: var(--spacing-xl);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: var(--spacing-lg);
+
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-cyan) var(--bg-surface);
+  }
+
+  .reviews-carousel::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .reviews-carousel::-webkit-scrollbar-track {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+  }
+
+  .reviews-carousel::-webkit-scrollbar-thumb {
+    background: var(--accent-cyan);
+    border-radius: var(--radius-lg);
+  }
+
+  .reviews-carousel::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-purple);
+  }
+
+  /* Review Card */
+  .review-card {
+    flex: 0 0 400px;
+    background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .review-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(0, 217, 255, 0.6);
+    box-shadow:
+      0 0 40px rgba(0, 217, 255, 0.4),
+      0 15px 50px rgba(0, 0, 0, 0.6);
+  }
+
+  .review-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Game Visual */
+  .review-visual {
+    position: relative;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, rgba(0, 217, 255, 0.1), transparent);
+    overflow: hidden;
+  }
+
+  .game-icon {
+    font-size: 6rem;
+    filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.6));
+    transition: transform var(--transition-normal);
+    z-index: 2;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .review-card:hover .game-icon {
+    transform: scale(1.2) rotate(5deg);
+  }
+
+  .visual-glow {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.3), transparent);
+    filter: blur(40px);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  /* Review Content */
+  .review-content {
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    flex-grow: 1;
+  }
+
+  .game-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+    transition: color var(--transition-fast);
+  }
+
+  .review-card:hover .game-title {
+    color: var(--accent-cyan);
+  }
+
+  /* Rating */
+  .rating {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .stars {
+    font-size: 1.5rem;
+    color: var(--accent-neon);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px var(--accent-neon);
+  }
+
+  .rating-number {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  /* Quote */
+  .review-quote {
+    flex-grow: 1;
+    margin: 0;
+    border-left: 3px solid var(--accent-cyan);
+    padding-left: var(--spacing-md);
+  }
+
+  .review-quote p {
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  /* Read Review Link */
+  .read-review {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--accent-cyan);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all var(--transition-normal);
+    width: fit-content;
+  }
+
+  .review-card:hover .read-review {
+    gap: var(--spacing-md);
+    color: var(--accent-purple);
+  }
+
+  .arrow {
+    transition: transform var(--transition-normal);
+  }
+
+  .review-card:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  /* Scroll Hint */
+  .scroll-hint {
+    text-align: center;
+    margin-top: var(--spacing-md);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    animation: fadeInOut 2s ease-in-out infinite;
+  }
+
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .review-card {
+      flex: 0 0 320px;
+    }
+
+    .game-icon {
+      font-size: 4rem;
+    }
+
+    .review-content {
+      padding: var(--spacing-lg);
+    }
+
+    .game-title {
+      font-size: 1.5rem;
+    }
+
+    .review-visual {
+      height: 160px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .review-card {
+      flex: 0 0 280px;
+    }
+
+    .game-icon {
+      font-size: 3rem;
+    }
+
+    .review-content {
+      padding: var(--spacing-md);
+      gap: var(--spacing-sm);
+    }
+
+    .game-title {
+      font-size: 1.25rem;
+    }
+
+    .stars {
+      font-size: 1.25rem;
+    }
+
+    .review-quote p {
+      font-size: 0.9rem;
+    }
+  }
+</style>

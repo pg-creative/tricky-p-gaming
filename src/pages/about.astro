@@ -1,0 +1,1145 @@
+---
+/**
+ * About Page - about.astro
+ *
+ * Epic, interactive page telling PG's story and showcasing the brand
+ *
+ * Sections:
+ * 1. Hero - Dramatic intro with parallax
+ * 2. Origin Story - Animated timeline
+ * 3. Stats & Achievements - Animated counters
+ * 4. Favorite Games - 3D card showcase
+ * 5. Brand Philosophy - What we stand for
+ * 6. Social Links - Connect everywhere
+ * 7. Community CTA - Join the adventure
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = 'About Tricky P Gaming';
+const pageDescription = 'Discover the story behind Tricky P Gaming - from epic boss battles to building a community of passionate gamers.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="about-page">
+
+    <!-- Hero Section with Parallax -->
+    <section class="hero-section parallax-section">
+      <div class="parallax-bg"></div>
+      <div class="container hero-content">
+        <h1 class="hero-title">
+          <span class="title-line">The Legend</span>
+          <span class="title-line accent">of Tricky P</span>
+        </h1>
+        <p class="hero-subtitle">
+          From struggling with my first Dark Souls boss to conquering the hardest challenges gaming has to offer.
+        </p>
+        <div class="scroll-indicator">
+          <span>Scroll to begin the journey</span>
+          <div class="scroll-arrow">↓</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Origin Story Timeline -->
+    <section class="timeline-section section">
+      <div class="container">
+        <h2 class="section-heading">The Journey Begins</h2>
+        <p class="section-intro">Every legend has an origin story. Here's mine.</p>
+
+        <div class="timeline">
+          <!-- Timeline Item 1 -->
+          <div class="timeline-item" data-year="2010">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">2010</div>
+              <h3>The Spark</h3>
+              <p>
+                Picked up my first controller. Started with casual games, not knowing
+                this would become my passion and career.
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline Item 2 -->
+          <div class="timeline-item" data-year="2015">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">2015</div>
+              <h3>The Challenge</h3>
+              <p>
+                Discovered Dark Souls. Died to the first boss 47 times.
+                Got back up 48 times. Fell in love with the grind.
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline Item 3 -->
+          <div class="timeline-item" data-year="2018">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">2018</div>
+              <h3>The Evolution</h3>
+              <p>
+                Started streaming my attempts at beating tough bosses.
+                People actually enjoyed watching me struggle. Who knew?
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline Item 4 -->
+          <div class="timeline-item" data-year="2020">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">2020</div>
+              <h3>The Community</h3>
+              <p>
+                Launched Tricky P Gaming officially. Built a community of
+                gamers who love a challenge as much as I do.
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline Item 5 -->
+          <div class="timeline-item" data-year="2025">
+            <div class="timeline-marker active"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">2025</div>
+              <h3>The Adventure Continues</h3>
+              <p>
+                Still here, still grinding, still loving every minute.
+                And this is just the beginning.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats & Achievements Section -->
+    <section class="stats-section section">
+      <div class="container">
+        <h2 class="section-heading">By the Numbers</h2>
+        <p class="section-intro">Some stats that tell the story</p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🎮</div>
+            <div class="stat-number" data-target="150">0</div>
+            <div class="stat-label">Games Completed</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">💀</div>
+            <div class="stat-number" data-target="10000">0</div>
+            <div class="stat-label">Deaths (and counting)</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-number" data-target="5000">0</div>
+            <div class="stat-label">Hours Streamed</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number" data-target="25000">0</div>
+            <div class="stat-label">Community Members</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-number" data-target="47">0</div>
+            <div class="stat-label">Platinum Trophies</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">☕</div>
+            <div class="stat-number" data-target="9999">0</div>
+            <div class="stat-label">Cups of Coffee</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Favorite Games Showcase -->
+    <section class="games-showcase-section section">
+      <div class="container">
+        <h2 class="section-heading">Hall of Fame</h2>
+        <p class="section-intro">The games that defined my journey</p>
+
+        <div class="games-grid">
+          <!-- Game Card 1 -->
+          <div class="game-card-3d">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <span class="placeholder-emoji">🗡️</span>
+                </div>
+                <h3>Elden Ring</h3>
+                <p class="card-genre">Souls-like RPG</p>
+              </div>
+              <div class="card-back">
+                <h3>Elden Ring</h3>
+                <p>
+                  The game that redefined open-world difficulty.
+                  Every corner holds a challenge, every boss a masterpiece.
+                </p>
+                <div class="card-stats">
+                  <span>500+ hours</span>
+                  <span>3 Playthroughs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Card 2 -->
+          <div class="game-card-3d">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <span class="placeholder-emoji">🩸</span>
+                </div>
+                <h3>Bloodborne</h3>
+                <p class="card-genre">Gothic Horror</p>
+              </div>
+              <div class="card-back">
+                <h3>Bloodborne</h3>
+                <p>
+                  The perfect blend of speed and brutality.
+                  My personal favorite From Software masterpiece.
+                </p>
+                <div class="card-stats">
+                  <span>400+ hours</span>
+                  <span>Platinum Trophy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Card 3 -->
+          <div class="game-card-3d">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <span class="placeholder-emoji">⚔️</span>
+                </div>
+                <h3>Sekiro</h3>
+                <p class="card-genre">Samurai Action</p>
+              </div>
+              <div class="card-back">
+                <h3>Sekiro</h3>
+                <p>
+                  The rhythm game disguised as a souls-like.
+                  Taught me the true meaning of "git gud".
+                </p>
+                <div class="card-stats">
+                  <span>200+ hours</span>
+                  <span>All Endings</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Card 4 -->
+          <div class="game-card-3d">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <span class="placeholder-emoji">🦋</span>
+                </div>
+                <h3>Hollow Knight</h3>
+                <p class="card-genre">Metroidvania</p>
+              </div>
+              <div class="card-back">
+                <h3>Hollow Knight</h3>
+                <p>
+                  Proof that indie games can be just as challenging and beautiful.
+                  A true work of art.
+                </p>
+                <div class="card-stats">
+                  <span>150+ hours</span>
+                  <span>112% Completion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Card 5 -->
+          <div class="game-card-3d">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <span class="placeholder-emoji">🎲</span>
+                </div>
+                <h3>Baldur's Gate 3</h3>
+                <p class="card-genre">CRPG</p>
+              </div>
+              <div class="card-back">
+                <h3>Baldur's Gate 3</h3>
+                <p>
+                  The RPG that reminded me why I fell in love with storytelling.
+                  Every choice matters.
+                </p>
+                <div class="card-stats">
+                  <span>300+ hours</span>
+                  <span>Multiple Runs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Card 6 -->
+          <div class="game-card-3d">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-image">
+                  <span class="placeholder-emoji">🔥</span>
+                </div>
+                <h3>Hades</h3>
+                <p class="card-genre">Roguelike</p>
+              </div>
+              <div class="card-back">
+                <h3>Hades</h3>
+                <p>
+                  The game that proved dying over and over can be incredibly fun.
+                  Pure roguelike perfection.
+                </p>
+                <div class="card-stats">
+                  <span>200+ hours</span>
+                  <span>All Weapons Maxed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand Philosophy -->
+    <section class="philosophy-section section">
+      <div class="container">
+        <h2 class="section-heading">What I Stand For</h2>
+
+        <div class="philosophy-grid">
+          <div class="philosophy-card">
+            <div class="philosophy-icon">💪</div>
+            <h3>Embrace the Challenge</h3>
+            <p>
+              Every death is a lesson. Every boss is a puzzle.
+              The harder the fight, the sweeter the victory.
+            </p>
+          </div>
+
+          <div class="philosophy-card">
+            <div class="philosophy-icon">🤝</div>
+            <h3>Community First</h3>
+            <p>
+              Gaming is better together. We celebrate wins, learn from losses,
+              and support each other through the grind.
+            </p>
+          </div>
+
+          <div class="philosophy-card">
+            <div class="philosophy-icon">🎯</div>
+            <h3>Quality Over Hype</h3>
+            <p>
+              I play what's good, not what's trending. Hidden gems deserve
+              just as much love as AAA blockbusters.
+            </p>
+          </div>
+
+          <div class="philosophy-card">
+            <div class="philosophy-icon">🎮</div>
+            <h3>Never Stop Learning</h3>
+            <p>
+              There's always a new mechanic to master, a new strategy to discover.
+              Stay curious, stay hungry.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Links Section -->
+    <section class="social-section section">
+      <div class="container">
+        <h2 class="section-heading">Let's Connect</h2>
+        <p class="section-intro">Find me across the gaming universe</p>
+
+        <div class="social-grid">
+          <!-- YouTube -->
+          <a href="#" class="social-card youtube" target="_blank" rel="noopener noreferrer">
+            <div class="social-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </div>
+            <div class="social-info">
+              <h3>YouTube</h3>
+              <p>VODs, highlights, and guides</p>
+            </div>
+            <div class="social-arrow">→</div>
+          </a>
+
+          <!-- Twitter/X -->
+          <a href="#" class="social-card twitter" target="_blank" rel="noopener noreferrer">
+            <div class="social-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </div>
+            <div class="social-info">
+              <h3>Twitter/X</h3>
+              <p>Updates and community banter</p>
+            </div>
+            <div class="social-arrow">→</div>
+          </a>
+
+          <!-- TikTok -->
+          <a href="#" class="social-card tiktok" target="_blank" rel="noopener noreferrer">
+            <div class="social-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+              </svg>
+            </div>
+            <div class="social-info">
+              <h3>TikTok</h3>
+              <p>Quick clips and gaming moments</p>
+            </div>
+            <div class="social-arrow">→</div>
+          </a>
+
+          <!-- Facebook -->
+          <a href="#" class="social-card facebook" target="_blank" rel="noopener noreferrer">
+            <div class="social-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </div>
+            <div class="social-info">
+              <h3>Facebook</h3>
+              <p>Community posts and events</p>
+            </div>
+            <div class="social-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community CTA -->
+    <section class="cta-section section">
+      <div class="container">
+        <div class="cta-card">
+          <h2>Ready to Join the Adventure?</h2>
+          <p>
+            Whether you're a souls veteran or just starting your journey,
+            there's a place for you in the Tricky P Gaming community.
+          </p>
+          <div class="cta-buttons">
+            <a href="/community" class="btn btn-primary">Join the Community</a>
+            <a href="/streams" class="btn btn-secondary">Watch Streams</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* Page Container */
+  .about-page {
+    min-height: 100vh;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .parallax-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 217, 255, 0.1) 0%,
+      rgba(157, 78, 221, 0.1) 100%
+    );
+    z-index: -1;
+  }
+
+  .hero-content {
+    text-align: center;
+    z-index: 1;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.1;
+  }
+
+  .title-line {
+    display: block;
+  }
+
+  .title-line.accent {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
+    line-height: 1.6;
+  }
+
+  .scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--accent-cyan);
+    font-size: 0.875rem;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .scroll-arrow {
+    font-size: 2rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  /* Section Styling */
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section-heading {
+    text-align: center;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: var(--spacing-md);
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-intro {
+    text-align: center;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Timeline Section */
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: var(--spacing-2xl) auto;
+    padding: var(--spacing-xl) 0;
+  }
+
+  /* Timeline vertical line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--accent-cyan) 10%,
+      var(--accent-cyan) 90%,
+      transparent
+    );
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: var(--spacing-2xl);
+    display: flex;
+    align-items: center;
+  }
+
+  .timeline-item:nth-child(odd) {
+    flex-direction: row-reverse;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: var(--bg-surface);
+    border: 3px solid var(--accent-cyan);
+    border-radius: 50%;
+    z-index: 2;
+    transition: all var(--transition-normal);
+  }
+
+  .timeline-marker.active {
+    width: 30px;
+    height: 30px;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 20px var(--accent-cyan);
+  }
+
+  .timeline-marker:hover {
+    background: var(--accent-cyan);
+    box-shadow: 0 0 20px var(--accent-cyan);
+  }
+
+  .timeline-content {
+    width: calc(50% - 40px);
+    background: var(--bg-surface);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    transition: all var(--transition-normal);
+  }
+
+  .timeline-content:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
+  }
+
+  .timeline-year {
+    font-size: 0.875rem;
+    color: var(--accent-cyan);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .timeline-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+  }
+
+  .timeline-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Stats Section */
+  .stats-section {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 217, 255, 0.05) 0%,
+      rgba(157, 78, 221, 0.05) 100%
+    );
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .stat-card {
+    background: var(--bg-surface);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    border: 2px solid rgba(0, 217, 255, 0.2);
+    text-align: center;
+    transition: all var(--transition-normal);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+  }
+
+  .stat-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent-cyan);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .stat-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Games Showcase */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+    perspective: 1000px;
+  }
+
+  .game-card-3d {
+    height: 400px;
+    perspective: 1000px;
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .game-card-3d:hover .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-front,
+  .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-front {
+    background: var(--bg-surface);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+  }
+
+  .card-back {
+    background: linear-gradient(135deg,
+      rgba(0, 217, 255, 0.2) 0%,
+      rgba(157, 78, 221, 0.2) 100%
+    );
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--accent-cyan);
+    transform: rotateY(180deg);
+  }
+
+  .card-image {
+    width: 150px;
+    height: 150px;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,
+      rgba(0, 217, 255, 0.1) 0%,
+      rgba(157, 78, 221, 0.1) 100%
+    );
+    border-radius: 50%;
+  }
+
+  .placeholder-emoji {
+    font-size: 4rem;
+  }
+
+  .card-front h3 {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .card-genre {
+    color: var(--accent-cyan);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .card-back h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--accent-cyan);
+  }
+
+  .card-back p {
+    text-align: center;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .card-stats {
+    display: flex;
+    gap: var(--spacing-md);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .card-stats span {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Philosophy Section */
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+  }
+
+  .philosophy-card {
+    background: var(--bg-surface);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    border: 2px solid transparent;
+    transition: all var(--transition-normal);
+  }
+
+  .philosophy-card:hover {
+    border-color: var(--accent-purple);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(157, 78, 221, 0.2);
+  }
+
+  .philosophy-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .philosophy-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--accent-purple);
+  }
+
+  .philosophy-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Social Links */
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .social-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--bg-surface);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .social-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+
+  .social-card:hover::before {
+    opacity: 1;
+  }
+
+  .social-card:hover {
+    transform: translateX(10px);
+  }
+
+  .social-card.youtube:hover {
+    border-color: #FF0000;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+  }
+
+  .social-card.twitter:hover {
+    border-color: #1DA1F2;
+    box-shadow: 0 0 30px rgba(29, 161, 242, 0.3);
+  }
+
+  .social-card.tiktok:hover {
+    border-color: #FF0050;
+    box-shadow: 0 0 30px rgba(255, 0, 80, 0.3);
+  }
+
+  .social-card.facebook:hover {
+    border-color: #1877F2;
+    box-shadow: 0 0 30px rgba(24, 119, 242, 0.3);
+  }
+
+  .social-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+
+  .social-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .social-info {
+    flex: 1;
+  }
+
+  .social-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+  }
+
+  .social-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .social-arrow {
+    font-size: 1.5rem;
+    color: var(--accent-cyan);
+    transition: transform var(--transition-normal);
+  }
+
+  .social-card:hover .social-arrow {
+    transform: translateX(5px);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 217, 255, 0.1) 0%,
+      rgba(157, 78, 221, 0.1) 100%
+    );
+  }
+
+  .cta-card {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--bg-surface);
+    border: 2px solid var(--accent-cyan);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.2);
+  }
+
+  .cta-card h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: var(--spacing-md);
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cta-card p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--accent-cyan);
+    color: var(--bg-primary);
+  }
+
+  .btn-primary:hover {
+    background: #00b8d4;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 2px solid var(--accent-purple);
+    color: var(--accent-purple);
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent-purple);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(157, 78, 221, 0.4);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .timeline::before {
+      left: 20px;
+    }
+
+    .timeline-item {
+      flex-direction: row !important;
+    }
+
+    .timeline-marker {
+      left: 20px;
+    }
+
+    .timeline-content {
+      width: calc(100% - 60px);
+      margin-left: 60px;
+    }
+
+    .stats-grid,
+    .philosophy-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .games-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .social-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Animated Stats Counter
+  function animateStats() {
+    const stats = document.querySelectorAll('.stat-number');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = parseInt(entry.target.getAttribute('data-target') || '0');
+          animateValue(entry.target, 0, target, 2000);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    stats.forEach(stat => observer.observe(stat));
+  }
+
+  function animateValue(element: Element, start: number, end: number, duration: number) {
+    const range = end - start;
+    const increment = range / (duration / 16);
+    let current = start;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= end) {
+        element.textContent = end.toLocaleString();
+        clearInterval(timer);
+      } else {
+        element.textContent = Math.floor(current).toLocaleString();
+      }
+    }, 16);
+  }
+
+  // Timeline Animation on Scroll
+  function animateTimeline() {
+    const items = document.querySelectorAll('.timeline-item');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.2 });
+
+    items.forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(30px)';
+      item.style.transition = 'all 0.6s ease-out';
+      observer.observe(item);
+    });
+  }
+
+  // Parallax Effect
+  function initParallax() {
+    const parallaxBg = document.querySelector('.parallax-bg');
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      if (parallaxBg) {
+        (parallaxBg as HTMLElement).style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
+    });
+  }
+
+  // Initialize all animations
+  document.addEventListener('DOMContentLoaded', () => {
+    animateStats();
+    animateTimeline();
+    initParallax();
+  });
+</script>

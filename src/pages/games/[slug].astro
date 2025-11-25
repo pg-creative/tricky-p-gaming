@@ -1,0 +1,820 @@
+---
+/**
+ * Individual Game Detail Page (Dynamic Route)
+ * Deep-dive pillar pages for each game
+ * Immersive, color-driven design that changes per game
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GameHero from '../../components/GameHero.astro';
+import { games, getGameBySlug } from '../../data/games';
+
+// Get all game slugs for static paths
+export async function getStaticPaths() {
+  return games.map(game => ({
+    params: { slug: game.slug },
+    props: { game }
+  }));
+}
+
+const { game } = Astro.props;
+
+if (!game) {
+  return Astro.redirect('/games');
+}
+
+// Sample boss data (would normally come from a separate data file)
+const bosses = [
+  { name: 'Opening Boss', difficulty: 7, attempts: 12 },
+  { name: 'Mid-Game Challenge', difficulty: 9, attempts: 47 },
+  { name: 'Final Boss', difficulty: 10, attempts: 89 }
+];
+---
+
+<BaseLayout
+  title={`${game.title} - Tricky P Gaming`}
+  description={`Deep dive into ${game.title}: my playthrough, tips, boss guides, and full review.`}
+>
+  <!-- Immersive Game Hero -->
+  <GameHero
+    title={game.title}
+    genre={game.genre}
+    platforms={game.platforms}
+    rating={game.rating}
+    playTime={game.playTime}
+    releaseYear={game.releaseYear}
+    colorScheme={game.colorScheme}
+  />
+
+  <!-- Main Content -->
+  <div class="game-content" style={`--game-primary: ${game.colorScheme.primary}; --game-secondary: ${game.colorScheme.secondary}; --game-accent: ${game.colorScheme.accent};`}>
+    <div class="container">
+      <!-- Overview Section -->
+      <section class="content-section" id="overview">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p class="lead-text">{game.description}</p>
+
+          <div class="overview-grid">
+            <div class="overview-card">
+              <h3 class="card-title">The Journey</h3>
+              <p>
+                After {game.playTime} hours of gameplay, {game.status === 'completed' ? 'I\'ve conquered' : 'I\'m still exploring'} every corner of this incredible experience.
+                {game.deaths && `With ${game.deaths.toLocaleString()} deaths along the way, `}
+                this game has tested my skills and patience in the best possible way.
+              </p>
+            </div>
+
+            <div class="overview-card">
+              <h3 class="card-title">What Makes It Special</h3>
+              <ul class="feature-list">
+                <li>Masterful {game.genre[0]} gameplay</li>
+                <li>Unforgettable atmosphere and world design</li>
+                <li>Challenging but fair difficulty curve</li>
+                <li>Deep lore and storytelling</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Dashboard -->
+      <section class="content-section stats-dashboard">
+        <h2 class="section-title">My Stats</h2>
+        <div class="stats-grid-large">
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-number">{game.playTime}h</div>
+            <div class="stat-text">Total Playtime</div>
+          </div>
+          {game.deaths && (
+            <div class="stat-card">
+              <div class="stat-icon">💀</div>
+              <div class="stat-number">{game.deaths.toLocaleString()}</div>
+              <div class="stat-text">Total Deaths</div>
+            </div>
+          )}
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-number">{game.rating}/10</div>
+            <div class="stat-text">My Rating</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-number">{game.completion}%</div>
+            <div class="stat-text">Completion</div>
+          </div>
+          {game.achievements && game.totalAchievements && (
+            <div class="stat-card">
+              <div class="stat-icon">🏆</div>
+              <div class="stat-number">{game.achievements}/{game.totalAchievements}</div>
+              <div class="stat-text">Achievements</div>
+            </div>
+          )}
+          {game.favoriteBoss && (
+            <div class="stat-card favorite">
+              <div class="stat-icon">⚔️</div>
+              <div class="stat-number">{game.favoriteBoss}</div>
+              <div class="stat-text">Favorite Boss</div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <!-- My Playthrough Section -->
+      <section class="content-section" id="playthrough">
+        <h2 class="section-title">My Playthrough</h2>
+        <div class="section-content">
+          <div class="playthrough-timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="timeline-title">First Impressions</h3>
+                <p>
+                  When I first started {game.title}, I knew I was in for something special.
+                  The opening moments set the tone perfectly, and I was immediately hooked.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="timeline-title">The Learning Curve</h3>
+                <p>
+                  Like any great {game.genre[0]}, mastering the mechanics took time.
+                  Each death was a lesson, and every victory felt earned.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="timeline-title">Breakthrough Moments</h3>
+                <p>
+                  {game.favoriteBoss ? `Fighting ${game.favoriteBoss} was the pinnacle of this experience. ` : ''}
+                  Those moments when everything clicks are what make these games unforgettable.
+                </p>
+              </div>
+            </div>
+
+            {game.status === 'completed' && (
+              <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                  <h3 class="timeline-title">Journey's End</h3>
+                  <p>
+                    After {game.playTime} hours, reaching the end was bittersweet.
+                    This game will stay with me for a long time.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <!-- Video Placeholder -->
+          <div class="video-embed">
+            <div class="video-placeholder">
+              <div class="play-icon">▶</div>
+              <p>Full Playthrough Video Coming Soon</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tips & Tricks Section -->
+      <section class="content-section">
+        <h2 class="section-title">Tips & Tricks</h2>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-number">01</div>
+            <h3 class="tip-title">Master the Basics</h3>
+            <p>Before diving into advanced strategies, make sure you have the fundamentals down. Practice makes perfect.</p>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-number">02</div>
+            <h3 class="tip-title">Patience is Key</h3>
+            <p>Don't rush. Take your time to learn enemy patterns and environmental hazards. Observation is your best weapon.</p>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-number">03</div>
+            <h3 class="tip-title">Explore Everything</h3>
+            <p>Hidden secrets and powerful items are everywhere. Thorough exploration is always rewarded.</p>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-number">04</div>
+            <h3 class="tip-title">Learn from Failure</h3>
+            <p>Every death teaches you something. Analyze what went wrong and adapt your strategy accordingly.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Boss Guides Section -->
+      <section class="content-section">
+        <h2 class="section-title">Boss Guides</h2>
+        <div class="boss-list">
+          {bosses.map(boss => (
+            <div class="boss-card">
+              <div class="boss-header">
+                <h3 class="boss-name">{boss.name}</h3>
+                <div class="boss-difficulty">
+                  <span class="difficulty-label">Difficulty:</span>
+                  <div class="difficulty-bars">
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <div class={`difficulty-bar ${i < boss.difficulty ? 'active' : ''}`}></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div class="boss-stats">
+                <span class="boss-stat">Attempts: {boss.attempts}</span>
+              </div>
+              <div class="boss-strategy">
+                <h4>Strategy:</h4>
+                <p>Detailed boss strategy guide coming soon. Stay tuned for patterns, weaknesses, and winning tactics.</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Review Section -->
+      <section class="content-section" id="review">
+        <h2 class="section-title">Final Review</h2>
+        <div class="review-content">
+          <div class="rating-display">
+            <div class="rating-score">{game.rating}</div>
+            <div class="rating-max">/10</div>
+          </div>
+
+          <div class="review-text">
+            <h3>The Verdict</h3>
+            <p class="lead-text">
+              {game.title} is {game.rating >= 9.5 ? 'an absolute masterpiece' : game.rating >= 9 ? 'an exceptional experience' : 'a fantastic game'} that
+              {game.genre.includes('Soulslike') ? 'perfectly captures what makes Soulslikes great' : 'stands out in its genre'}.
+            </p>
+
+            <div class="pros-cons">
+              <div class="pros">
+                <h4>What I Loved</h4>
+                <ul>
+                  <li>Exceptional gameplay mechanics</li>
+                  <li>Stunning world design and atmosphere</li>
+                  <li>Memorable boss encounters</li>
+                  <li>Deep and rewarding progression</li>
+                </ul>
+              </div>
+
+              <div class="cons">
+                <h4>Minor Gripes</h4>
+                <ul>
+                  <li>Steep learning curve for newcomers</li>
+                  <li>Some frustrating difficulty spikes</li>
+                  <li>Occasional technical issues</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="recommendation">
+              <h4>Should You Play It?</h4>
+              <p>
+                Absolutely. Whether you're a veteran of {game.genre[0]} games or looking for your next challenge,
+                {game.title} delivers an unforgettable experience that's worth every hour.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Image Gallery Placeholder -->
+      <section class="content-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery-grid">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div class="gallery-item">
+              <div class="gallery-placeholder">
+                Screenshot {i}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Back to Library -->
+      <div class="back-link">
+        <a href="/games" class="back-button">← Back to Game Library</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .game-content {
+    padding: var(--spacing-2xl) 0;
+    background: var(--bg-primary);
+  }
+
+  .content-section {
+    margin-bottom: var(--spacing-4xl);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    margin-bottom: var(--spacing-xl);
+    background: linear-gradient(
+      135deg,
+      var(--game-primary),
+      var(--game-accent)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    padding-bottom: var(--spacing-md);
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--game-primary),
+      var(--game-accent)
+    );
+    border-radius: var(--radius-full);
+  }
+
+  .section-content {
+    background: var(--bg-surface);
+    border: 2px solid color-mix(in srgb, var(--game-primary) 30%, transparent);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: 0 0 30px color-mix(in srgb, var(--game-primary) 10%, transparent);
+  }
+
+  .lead-text {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Overview Grid */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .overview-card {
+    background: color-mix(in srgb, var(--game-primary) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--game-primary) 20%, transparent);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .feature-list li {
+    padding: var(--spacing-sm) 0;
+    padding-left: var(--spacing-lg);
+    position: relative;
+    color: var(--text-secondary);
+  }
+
+  .feature-list li::before {
+    content: '▶';
+    position: absolute;
+    left: 0;
+    color: var(--game-accent);
+  }
+
+  /* Stats Dashboard */
+  .stats-dashboard {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--game-primary) 15%, var(--bg-surface)),
+      var(--bg-surface)
+    );
+    border: 2px solid var(--game-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    box-shadow: 0 0 50px color-mix(in srgb, var(--game-primary) 20%, transparent);
+  }
+
+  .stats-grid-large {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .stat-card {
+    background: var(--bg-surface);
+    border: 2px solid color-mix(in srgb, var(--game-accent) 40%, transparent);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    transition: all var(--transition-normal);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--game-accent);
+    box-shadow: 0 0 30px color-mix(in srgb, var(--game-accent) 30%, transparent);
+  }
+
+  .stat-card.favorite {
+    grid-column: span 2;
+  }
+
+  .stat-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .stat-card.favorite .stat-number {
+    font-size: 1.25rem;
+  }
+
+  .stat-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Playthrough Timeline */
+  .playthrough-timeline {
+    position: relative;
+    padding-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .playthrough-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(
+      180deg,
+      var(--game-primary),
+      var(--game-accent)
+    );
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: calc(-1 * var(--spacing-xl) - 7px);
+    top: 0;
+    width: 16px;
+    height: 16px;
+    background: var(--game-accent);
+    border: 3px solid var(--bg-surface);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--game-accent);
+  }
+
+  .timeline-content {
+    background: color-mix(in srgb, var(--game-primary) 10%, transparent);
+    border-left: 3px solid var(--game-primary);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+  }
+
+  .timeline-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* Video Embed */
+  .video-embed {
+    margin-top: var(--spacing-xl);
+  }
+
+  .video-placeholder {
+    aspect-ratio: 16/9;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--game-primary) 20%, var(--bg-surface)),
+      var(--bg-surface)
+    );
+    border: 2px dashed color-mix(in srgb, var(--game-accent) 40%, transparent);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .play-icon {
+    font-size: 4rem;
+    color: var(--game-accent);
+    opacity: 0.6;
+  }
+
+  /* Tips Grid */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .tip-card {
+    background: var(--bg-surface);
+    border: 2px solid color-mix(in srgb, var(--game-primary) 30%, transparent);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tip-number {
+    position: absolute;
+    top: -10px;
+    right: var(--spacing-md);
+    font-size: 4rem;
+    font-weight: 900;
+    color: color-mix(in srgb, var(--game-primary) 15%, transparent);
+    line-height: 1;
+  }
+
+  .tip-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Boss Cards */
+  .boss-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .boss-card {
+    background: var(--bg-surface);
+    border: 2px solid color-mix(in srgb, var(--game-primary) 30%, transparent);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+  }
+
+  .boss-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .boss-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--game-accent);
+  }
+
+  .boss-difficulty {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .difficulty-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .difficulty-bars {
+    display: flex;
+    gap: 3px;
+  }
+
+  .difficulty-bar {
+    width: 8px;
+    height: 20px;
+    background: color-mix(in srgb, var(--text-primary) 20%, transparent);
+    border-radius: 2px;
+  }
+
+  .difficulty-bar.active {
+    background: var(--game-accent);
+    box-shadow: 0 0 10px var(--game-accent);
+  }
+
+  .boss-stats {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-secondary);
+  }
+
+  .boss-strategy h4 {
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* Review */
+  .review-content {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+  }
+
+  .rating-display {
+    background: linear-gradient(
+      135deg,
+      var(--game-primary),
+      var(--game-secondary)
+    );
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: 0 0 40px color-mix(in srgb, var(--game-accent) 30%, transparent);
+  }
+
+  .rating-score {
+    font-size: 5rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+  }
+
+  .rating-max {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .review-text h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+  }
+
+  .pros, .cons {
+    background: color-mix(in srgb, var(--game-primary) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--game-primary) 20%, transparent);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+  }
+
+  .pros h4, .cons h4 {
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .pros ul, .cons ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .pros li, .cons li {
+    padding: var(--spacing-xs) 0;
+    color: var(--text-secondary);
+  }
+
+  .recommendation {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--game-accent) 15%, transparent),
+      transparent
+    );
+    border-left: 4px solid var(--game-accent);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+  }
+
+  .recommendation h4 {
+    color: var(--game-accent);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* Gallery */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .gallery-item {
+    aspect-ratio: 16/9;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .gallery-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--game-primary) 20%, var(--bg-surface)),
+      var(--bg-surface)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    border: 2px dashed color-mix(in srgb, var(--game-accent) 30%, transparent);
+  }
+
+  /* Back Link */
+  .back-link {
+    margin-top: var(--spacing-4xl);
+    text-align: center;
+  }
+
+  .back-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--bg-surface);
+    border: 2px solid var(--game-accent);
+    border-radius: var(--radius-lg);
+    color: var(--game-accent);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all var(--transition-normal);
+  }
+
+  .back-button:hover {
+    background: var(--game-accent);
+    color: var(--bg-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px color-mix(in srgb, var(--game-accent) 40%, transparent);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .review-content {
+      grid-template-columns: 1fr;
+    }
+
+    .rating-display {
+      margin: 0 auto;
+    }
+
+    .stats-grid-large {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-card.favorite {
+      grid-column: span 2;
+    }
+
+    .playthrough-timeline {
+      padding-left: var(--spacing-lg);
+    }
+
+    .section-content {
+      padding: var(--spacing-lg);
+    }
+
+    .stats-dashboard {
+      padding: var(--spacing-lg);
+    }
+  }
+</style>

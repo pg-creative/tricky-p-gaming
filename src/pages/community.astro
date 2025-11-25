@@ -1,0 +1,540 @@
+---
+/**
+ * Community Page - community.astro
+ *
+ * Community hub featuring Discord info, events, member spotlights,
+ * and community guidelines.
+ *
+ * Sections:
+ * - Hero: Join the Adventure
+ * - Discord Info & Widget
+ * - Community Events
+ * - Member Spotlights
+ * - Rules & Guidelines
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DiscordWidget from '../components/DiscordWidget.astro';
+import CommunityEvent from '../components/CommunityEvent.astro';
+import MemberSpotlight from '../components/MemberSpotlight.tsx';
+import { getUpcomingEvents } from '../data/communityEvents';
+
+const upcomingEvents = getUpcomingEvents();
+
+// Server stats (placeholder numbers)
+const serverStats = {
+  totalMembers: 1247,
+  onlineMembers: 342,
+  channels: 15,
+  activeUsers: 892
+};
+---
+
+<BaseLayout
+  title="Community - Tricky P Gaming"
+  description="Join the Tricky P Gaming community! Connect with fellow gamers, participate in events, and be part of our Discord server."
+>
+  <!-- Hero Section -->
+  <section class="community-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Join the Adventure</h1>
+        <p class="hero-subtitle">
+          Connect with fellow gamers, share experiences, and be part of our growing community
+        </p>
+
+        <!-- Server Stats -->
+        <div class="server-stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">{serverStats.totalMembers.toLocaleString()}</div>
+            <div class="stat-label">Total Members</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{serverStats.onlineMembers.toLocaleString()}</div>
+            <div class="stat-label">Online Now</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{serverStats.channels}</div>
+            <div class="stat-label">Channels</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{serverStats.activeUsers.toLocaleString()}</div>
+            <div class="stat-label">Active Users</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Discord Info Section -->
+  <section class="discord-section section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Join Our Discord</h2>
+        <p class="section-description">
+          The heart of our community. Join thousands of gamers, participate in events,
+          and connect with like-minded players!
+        </p>
+      </div>
+
+      <div class="discord-content">
+        <DiscordWidget
+          serverName="Tricky P Gaming"
+          memberCount={serverStats.totalMembers}
+          onlineCount={serverStats.onlineMembers}
+        />
+
+        <div class="discord-features">
+          <h3 class="features-title">What You'll Find</h3>
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon">💬</div>
+              <h4>Active Community</h4>
+              <p>Chat with fellow gamers about strategies, builds, and game discoveries</p>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🎮</div>
+              <h4>Co-op Sessions</h4>
+              <p>Find groups for co-op games, raids, and multiplayer adventures</p>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🏆</div>
+              <h4>Tournaments</h4>
+              <p>Compete in regular tournaments and community challenges</p>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">📺</div>
+              <h4>Stream Alerts</h4>
+              <p>Get notified when Tricky P goes live and join the fun</p>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🎁</div>
+              <h4>Giveaways</h4>
+              <p>Participate in exclusive giveaways and community rewards</p>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🤝</div>
+              <h4>Friendly Vibes</h4>
+              <p>Welcoming, inclusive community where everyone belongs</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Events Section -->
+  <section class="events-section section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Community Events</h2>
+        <p class="section-description">
+          Regular events, tournaments, and activities to keep the community engaged
+        </p>
+      </div>
+
+      <div class="events-grid">
+        {upcomingEvents.map(event => (
+          <CommunityEvent
+            title={event.title}
+            description={event.description}
+            date={event.date}
+            type={event.type}
+            participants={event.participants}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Member Spotlights Section -->
+  <section class="spotlights-section section">
+    <div class="container">
+      <MemberSpotlight client:visible />
+    </div>
+  </section>
+
+  <!-- Rules & Guidelines Section -->
+  <section class="rules-section section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Community Guidelines</h2>
+        <p class="section-description">
+          Help us maintain a positive, inclusive space for all members
+        </p>
+      </div>
+
+      <div class="rules-content">
+        <div class="rules-grid">
+          <div class="rule-card">
+            <div class="rule-icon">🤝</div>
+            <h3>Be Respectful</h3>
+            <p>Treat all members with kindness and respect. No harassment, hate speech, or discrimination of any kind.</p>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-icon">🎮</div>
+            <h3>Stay On Topic</h3>
+            <p>Keep discussions relevant to gaming and community activities. Use appropriate channels for different topics.</p>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-icon">🚫</div>
+            <h3>No Spam</h3>
+            <p>Avoid excessive self-promotion, spam, or repetitive messages. Quality over quantity!</p>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-icon">🛡️</div>
+            <h3>Follow Discord TOS</h3>
+            <p>Adhere to Discord's Terms of Service and Community Guidelines at all times.</p>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-icon">🎭</div>
+            <h3>No Spoilers</h3>
+            <p>Use spoiler tags when discussing story elements. Respect others' gaming experiences.</p>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-icon">💬</div>
+            <h3>Constructive Discussion</h3>
+            <p>Keep debates civil and constructive. It's okay to disagree, but stay respectful.</p>
+          </div>
+        </div>
+
+        <div class="rules-footer">
+          <p>
+            Have questions or concerns? Reach out to our moderators.
+            We're here to help maintain a welcoming community for everyone!
+          </p>
+          <a href="https://discord.gg/trickypgaming" class="cta-button" target="_blank" rel="noopener noreferrer">
+            Join Our Discord
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero Section */
+  .community-hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl) 0;
+    background: linear-gradient(
+      135deg,
+      var(--bg-primary) 0%,
+      rgba(88, 101, 242, 0.1) 50%,
+      var(--bg-primary) 100%
+    );
+    position: relative;
+    overflow: hidden;
+  }
+
+  .community-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(88, 101, 242, 0.15),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    background: linear-gradient(
+      135deg,
+      #5865f2 0%,
+      var(--accent-cyan) 50%,
+      var(--accent-purple) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-md);
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.125rem, 3vw, 1.5rem);
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto var(--spacing-xl) auto;
+    line-height: 1.6;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  /* Server Stats Grid */
+  .server-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .stat-card {
+    background: var(--bg-surface);
+    border: 2px solid rgba(88, 101, 242, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    transition: all var(--transition-normal);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: #5865f2;
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #5865f2;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Section Styles */
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Discord Section */
+  .discord-section {
+    background: linear-gradient(
+      135deg,
+      rgba(88, 101, 242, 0.05) 0%,
+      transparent 100%
+    );
+  }
+
+  .discord-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+  }
+
+  .discord-features {
+    background: var(--bg-surface);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+  }
+
+  .features-title {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .feature-item {
+    text-align: center;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .feature-item h4 {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .feature-item p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Events Grid */
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  /* Rules Section */
+  .rules-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .rule-card {
+    background: var(--bg-surface);
+    border: 2px solid rgba(157, 78, 221, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    transition: all var(--transition-normal);
+  }
+
+  .rule-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-purple);
+    box-shadow: 0 8px 24px rgba(157, 78, 221, 0.2);
+  }
+
+  .rule-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .rule-card h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .rule-card p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .rules-footer {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(157, 78, 221, 0.1));
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+  }
+
+  .rules-footer p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: linear-gradient(135deg, #5865f2, var(--accent-purple));
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1.125rem;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 16px rgba(88, 101, 242, 0.3);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.4);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .community-hero {
+      min-height: 60vh;
+    }
+
+    .server-stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+    }
+
+    .discord-content {
+      grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+
+    .events-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .rules-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .section {
+      padding: var(--spacing-xl) 0;
+    }
+  }
+</style>

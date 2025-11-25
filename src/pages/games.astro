@@ -1,0 +1,428 @@
+---
+/**
+ * Games Library Page
+ * Main pillar page showing all games with filtering and sorting
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DetailedGameCard from '../components/DetailedGameCard.astro';
+import { games, getFeaturedGames } from '../data/games';
+
+const featuredGames = getFeaturedGames();
+---
+
+<BaseLayout
+  title="Game Library - Tricky P Gaming"
+  description="Explore the complete game library featuring Soulslikes, RPGs, and indie gems played by Tricky P."
+>
+  <section class="games-page">
+    <div class="container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">Game Library</h1>
+        <p class="page-description">
+          My journey through Soulslikes, RPGs, and indie masterpieces. Each game tells a story.
+        </p>
+      </div>
+
+      <!-- Featured Game Spotlight -->
+      {featuredGames.length > 0 && (
+        <div class="featured-section">
+          <h2 class="section-title">Featured Now</h2>
+          <div class="featured-games">
+            {featuredGames.map(game => (
+              <div class="featured-game" style={`--featured-primary: ${game.colorScheme.primary}; --featured-accent: ${game.colorScheme.accent};`}>
+                <a href={`/games/${game.slug}`} class="featured-link">
+                  <div class="featured-content">
+                    <div class="featured-badge">Featured</div>
+                    <h3 class="featured-title">{game.title}</h3>
+                    <p class="featured-description">{game.description}</p>
+                    <div class="featured-stats">
+                      <span class="featured-stat">{game.rating}/10</span>
+                      <span class="featured-stat">{game.playTime}h played</span>
+                      <span class="featured-stat">{game.completion}% complete</span>
+                    </div>
+                    <div class="featured-cta">
+                      Explore Game →
+                    </div>
+                  </div>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Filters and Sorting -->
+      <div class="controls">
+        <div class="filters">
+          <button class="filter-btn active" data-genre="All">All Games</button>
+          <button class="filter-btn" data-genre="Soulslike">Soulslikes</button>
+          <button class="filter-btn" data-genre="RPG">RPGs</button>
+          <button class="filter-btn" data-genre="Indie">Indie</button>
+        </div>
+
+        <div class="sort-controls">
+          <label for="sort" class="sort-label">Sort by:</label>
+          <select id="sort" class="sort-select">
+            <option value="recent">Recently Played</option>
+            <option value="rating">Highest Rated</option>
+            <option value="alphabetical">A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Games Grid -->
+      <div class="games-grid" id="gamesGrid">
+        {games.map(game => (
+          <div class="game-item" data-genres={game.genre.join(',')}>
+            <DetailedGameCard {...game} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Filter and sort functionality
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const sortSelect = document.getElementById('sort') as HTMLSelectElement;
+  const gamesGrid = document.getElementById('gamesGrid') as HTMLElement;
+  const gameItems = Array.from(document.querySelectorAll('.game-item')) as HTMLElement[];
+
+  let currentGenre = 'All';
+  let currentSort = 'recent';
+
+  // Filter by genre
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      currentGenre = button.getAttribute('data-genre') || 'All';
+      filterAndSort();
+    });
+  });
+
+  // Sort games
+  sortSelect?.addEventListener('change', (e) => {
+    currentSort = (e.target as HTMLSelectElement).value;
+    filterAndSort();
+  });
+
+  function filterAndSort() {
+    // Filter
+    const filteredItems = gameItems.filter(item => {
+      if (currentGenre === 'All') return true;
+      const genres = item.getAttribute('data-genres') || '';
+      return genres.includes(currentGenre);
+    });
+
+    // Hide all items first
+    gameItems.forEach(item => {
+      item.style.display = 'none';
+    });
+
+    // Sort
+    if (currentSort === 'alphabetical') {
+      filteredItems.sort((a, b) => {
+        const titleA = a.querySelector('.game-title')?.textContent || '';
+        const titleB = b.querySelector('.game-title')?.textContent || '';
+        return titleA.localeCompare(titleB);
+      });
+    } else if (currentSort === 'rating') {
+      filteredItems.sort((a, b) => {
+        const ratingA = parseFloat(a.querySelector('.stat-value')?.textContent || '0');
+        const ratingB = parseFloat(b.querySelector('.stat-value')?.textContent || '0');
+        return ratingB - ratingA;
+      });
+    }
+    // 'recent' maintains default order from data
+
+    // Reorder and show filtered items
+    filteredItems.forEach((item, index) => {
+      item.style.display = 'block';
+      item.style.order = String(index);
+    });
+  }
+</script>
+
+<style>
+  .games-page {
+    padding: var(--spacing-2xl) 0;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-xl) 0;
+  }
+
+  .page-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 900;
+    margin-bottom: var(--spacing-md);
+    background: linear-gradient(
+      135deg,
+      var(--accent-cyan),
+      var(--accent-purple),
+      var(--accent-neon)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.3));
+  }
+
+  .page-description {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Featured Section */
+  .featured-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .featured-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .featured-game {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--featured-primary) 30%, var(--bg-surface)),
+      var(--bg-surface)
+    );
+    border: 2px solid var(--featured-accent);
+    box-shadow:
+      0 0 30px color-mix(in srgb, var(--featured-accent) 30%, transparent),
+      0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: all var(--transition-normal);
+  }
+
+  .featured-game:hover {
+    transform: translateY(-8px);
+    box-shadow:
+      0 0 50px color-mix(in srgb, var(--featured-accent) 50%, transparent),
+      0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .featured-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .featured-content {
+    padding: var(--spacing-xl);
+  }
+
+  .featured-badge {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
+    background: var(--featured-accent);
+    color: var(--bg-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .featured-title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .featured-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .featured-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+
+  .featured-stat {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--featured-accent);
+  }
+
+  .featured-cta {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--featured-accent);
+    transition: transform var(--transition-normal);
+  }
+
+  .featured-game:hover .featured-cta {
+    transform: translateX(8px);
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+  }
+
+  .filters {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 0.625rem 1.25rem;
+    background: var(--bg-surface);
+    border: 2px solid color-mix(in srgb, var(--accent-cyan) 40%, transparent);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+  }
+
+  .filter-btn.active {
+    background: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    color: var(--bg-primary);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+  }
+
+  .sort-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .sort-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .sort-select {
+    padding: 0.625rem 1rem;
+    background: var(--bg-surface);
+    border: 2px solid color-mix(in srgb, var(--accent-cyan) 40%, transparent);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+  }
+
+  .sort-select:hover,
+  .sort-select:focus {
+    border-color: var(--accent-cyan);
+    outline: none;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+  }
+
+  /* Games Grid */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .game-item {
+    animation: fadeInUp 0.6s ease-out both;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger animation for game items */
+  .game-item:nth-child(1) { animation-delay: 0.1s; }
+  .game-item:nth-child(2) { animation-delay: 0.15s; }
+  .game-item:nth-child(3) { animation-delay: 0.2s; }
+  .game-item:nth-child(4) { animation-delay: 0.25s; }
+  .game-item:nth-child(5) { animation-delay: 0.3s; }
+  .game-item:nth-child(6) { animation-delay: 0.35s; }
+  .game-item:nth-child(7) { animation-delay: 0.4s; }
+  .game-item:nth-child(8) { animation-delay: 0.45s; }
+  .game-item:nth-child(9) { animation-delay: 0.5s; }
+  .game-item:nth-child(10) { animation-delay: 0.55s; }
+  .game-item:nth-child(11) { animation-delay: 0.6s; }
+  .game-item:nth-child(12) { animation-delay: 0.65s; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .games-page {
+      padding: var(--spacing-xl) 0;
+    }
+
+    .controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .filters {
+      justify-content: center;
+    }
+
+    .sort-controls {
+      justify-content: center;
+    }
+
+    .games-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+
+    .featured-games {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

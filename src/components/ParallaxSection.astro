@@ -1,0 +1,68 @@
+---
+/**
+ * ParallaxSection Component
+ * Creates a parallax scrolling effect for wrapped content
+ */
+
+interface Props {
+  speed?: number;
+  direction?: 'up' | 'down';
+  class?: string;
+  id?: string;
+  zIndex?: number;
+}
+
+const {
+  speed = 0.5,
+  direction = 'up',
+  class: className = '',
+  id,
+  zIndex = 1
+} = Astro.props;
+---
+
+<div
+  class={`parallax-section ${className}`}
+  data-parallax-speed={speed}
+  data-parallax-direction={direction}
+  id={id}
+  style={`z-index: ${zIndex};`}
+>
+  <div class="parallax-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .parallax-section {
+    position: relative;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .parallax-content {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .parallax-section {
+      will-change: auto;
+    }
+  }
+</style>
+
+<script>
+  import { initParallaxScroll } from '../utils/scrollAnimations';
+
+  // Initialize parallax effect when component loads
+  document.addEventListener('DOMContentLoaded', () => {
+    initParallaxScroll('.parallax-section');
+  });
+
+  // Re-initialize on Astro page transitions if using View Transitions
+  document.addEventListener('astro:page-load', () => {
+    initParallaxScroll('.parallax-section');
+  });
+</script>

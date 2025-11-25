@@ -1,0 +1,425 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { blogPosts, getPostBySlug, getRelatedPosts } from '../../data/blogPosts';
+import BlogCard from '../../components/BlogCard.astro';
+
+export async function getStaticPaths() {
+  return blogPosts.map(post => ({
+    params: { slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = getPostBySlug(slug as string);
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const relatedPosts = getRelatedPosts(slug as string, 3);
+
+// Format date
+const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Category color mapping
+const categoryColors = {
+  Tips: 'from-blue-500 to-cyan-500',
+  Reviews: 'from-purple-500 to-pink-500',
+  Tutorials: 'from-green-500 to-emerald-500',
+  News: 'from-orange-500 to-red-500'
+};
+
+const categoryColor = categoryColors[post.category];
+---
+
+<BaseLayout title={`${post.title} - Tricky P Gaming`}>
+  <div class="article-page min-h-screen">
+    {/* Article Hero */}
+    <section class="article-hero relative py-16 px-4 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-purple-900/30 via-transparent to-transparent"></div>
+
+      {/* Background effects */}
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="nebula-orb absolute top-0 -left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div class="nebula-orb absolute top-20 right-0 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div class="max-w-4xl mx-auto relative z-10">
+        {/* Breadcrumb */}
+        <nav class="mb-6 text-sm">
+          <ol class="flex items-center gap-2 text-gray-400">
+            <li><a href="/" class="hover:text-purple-400 transition-colors">Home</a></li>
+            <li>/</li>
+            <li><a href="/blog" class="hover:text-purple-400 transition-colors">Blog</a></li>
+            <li>/</li>
+            <li class="text-purple-400">{post.title}</li>
+          </ol>
+        </nav>
+
+        {/* Category Badge */}
+        <div class="mb-4">
+          <span class={`inline-block bg-gradient-to-r ${categoryColor} text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-lg`}>
+            {post.category}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          {post.title}
+        </h1>
+
+        {/* Meta Information */}
+        <div class="flex flex-wrap items-center gap-6 text-gray-300 mb-8">
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+              {post.author.charAt(0)}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white">{post.author}</p>
+              <p class="text-xs text-gray-400">Author</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm">{formattedDate}</span>
+          </div>
+
+          <div class="flex items-center gap-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">{post.readTime} min read</span>
+          </div>
+        </div>
+
+        {/* Featured Image Placeholder */}
+        <div class="featured-image relative overflow-hidden rounded-xl mb-8 h-96">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-900/60 to-blue-900/60 flex items-center justify-center">
+            <svg class="w-32 h-32 text-white/20" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Article Content */}
+    <section class="article-content py-12 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Content */}
+          <div class="lg:col-span-3">
+            <article class="prose prose-invert prose-lg max-w-none">
+              <div class="content-wrapper bg-gradient-to-br from-gray-900/60 to-gray-800/40 border border-purple-500/20 rounded-xl p-8 md:p-12 backdrop-blur-sm">
+                <div set:html={post.content} class="article-body"></div>
+
+                {/* Tags */}
+                <div class="mt-12 pt-8 border-t border-gray-700/50">
+                  <h3 class="text-sm font-semibold text-gray-400 mb-4">TAGS</h3>
+                  <div class="flex flex-wrap gap-2">
+                    {post.tags.map(tag => (
+                      <span class="tag px-4 py-2 bg-purple-500/10 border border-purple-500/30 text-purple-300 text-sm rounded-full hover:bg-purple-500/20 transition-all cursor-pointer">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Share Section */}
+                <div class="mt-8 pt-8 border-t border-gray-700/50">
+                  <h3 class="text-sm font-semibold text-gray-400 mb-4">SHARE THIS ARTICLE</h3>
+                  <div class="flex gap-3">
+                    <button class="share-btn p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg hover:bg-blue-600/30 transition-all">
+                      <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                    </button>
+                    <button class="share-btn p-3 bg-sky-600/20 border border-sky-500/30 rounded-lg hover:bg-sky-600/30 transition-all">
+                      <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                      </svg>
+                    </button>
+                    <button class="share-btn p-3 bg-green-600/20 border border-green-500/30 rounded-lg hover:bg-green-600/30 transition-all">
+                      <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            {/* Author Bio */}
+            <div class="author-bio mt-8 p-8 bg-gradient-to-br from-purple-900/30 to-pink-900/20 border border-purple-500/30 rounded-xl backdrop-blur-sm">
+              <div class="flex items-start gap-4">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                  {post.author.charAt(0)}
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-white mb-2">{post.author}</h3>
+                  <p class="text-gray-300 text-sm leading-relaxed">
+                    Gaming enthusiast and content creator sharing tips, reviews, and tutorials for fellow gamers. Specializing in soulslike games, RPGs, and indie hidden gems.
+                  </p>
+                  <div class="flex gap-3 mt-4">
+                    <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                      </svg>
+                    </a>
+                    <a href="#" class="text-purple-400 hover:text-purple-300 transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Comments Section Placeholder */}
+            <div class="comments-section mt-8 p-8 bg-gradient-to-br from-gray-900/60 to-gray-800/40 border border-purple-500/20 rounded-xl backdrop-blur-sm">
+              <h3 class="text-2xl font-bold text-white mb-6">Comments</h3>
+              <div class="text-center py-12">
+                <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                <p class="text-gray-400 mb-4">Comments coming soon!</p>
+                <p class="text-sm text-gray-500">Join the conversation when we enable comments.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <aside class="lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+              {/* Table of Contents */}
+              <div class="sidebar-card p-6 bg-gradient-to-br from-gray-900/60 to-gray-800/40 border border-purple-500/20 rounded-xl backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+                  </svg>
+                  Table of Contents
+                </h3>
+                <nav class="toc space-y-2 text-sm">
+                  <a href="#" class="block py-2 px-3 text-gray-300 hover:text-purple-400 hover:bg-purple-500/10 rounded transition-all">Introduction</a>
+                  <a href="#" class="block py-2 px-3 text-gray-300 hover:text-purple-400 hover:bg-purple-500/10 rounded transition-all">Main Content</a>
+                  <a href="#" class="block py-2 px-3 text-gray-300 hover:text-purple-400 hover:bg-purple-500/10 rounded transition-all">Advanced Tips</a>
+                  <a href="#" class="block py-2 px-3 text-gray-300 hover:text-purple-400 hover:bg-purple-500/10 rounded transition-all">Conclusion</a>
+                </nav>
+              </div>
+
+              {/* Newsletter */}
+              <div class="sidebar-card p-6 bg-gradient-to-br from-purple-900/40 to-pink-900/20 border border-purple-500/30 rounded-xl backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-2">Never Miss an Update</h3>
+                <p class="text-sm text-gray-300 mb-4">Subscribe for gaming tips and news.</p>
+                <form class="space-y-3">
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    class="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-all"
+                  />
+                  <button
+                    type="submit"
+                    class="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* Related Posts */}
+    {relatedPosts.length > 0 && (
+      <section class="related-posts py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+          <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            Related Articles
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedPosts.map(relatedPost => (
+              <BlogCard
+                title={relatedPost.title}
+                excerpt={relatedPost.excerpt}
+                date={relatedPost.date}
+                category={relatedPost.category}
+                image={relatedPost.image}
+                slug={relatedPost.slug}
+                readTime={relatedPost.readTime}
+                author={relatedPost.author}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .article-page {
+    background: linear-gradient(to bottom, #0a0118, #1a0b2e);
+  }
+
+  .nebula-orb {
+    animation: float 20s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(30px, -30px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+  }
+
+  .featured-image {
+    border: 1px solid rgba(139, 92, 246, 0.2);
+  }
+
+  .content-wrapper {
+    transition: all 0.3s ease;
+  }
+
+  .content-wrapper:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+  }
+
+  /* Article Body Styles */
+  .article-body :global(h2) {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+  }
+
+  .article-body :global(h3) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-body :global(p) {
+    color: #d1d5db;
+    line-height: 1.875;
+    margin-bottom: 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  .article-body :global(strong) {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .article-body :global(a) {
+    color: #c084fc;
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .article-body :global(a:hover) {
+    color: #e9d5ff;
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .article-body :global(li) {
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+    line-height: 1.75;
+  }
+
+  .article-body :global(code) {
+    background: rgba(139, 92, 246, 0.1);
+    color: #c084fc;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+  }
+
+  .article-body :global(blockquote) {
+    border-left: 4px solid rgba(139, 92, 246, 0.5);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #9ca3af;
+  }
+
+  .tag {
+    transition: all 0.3s ease;
+  }
+
+  .tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  }
+
+  .share-btn {
+    transition: all 0.3s ease;
+  }
+
+  .share-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .sidebar-card {
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-card:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    .article-hero {
+      padding: 2rem 1rem;
+    }
+
+    .article-hero h1 {
+      font-size: 2rem;
+    }
+
+    .featured-image {
+      height: 16rem;
+    }
+
+    .content-wrapper {
+      padding: 1.5rem;
+    }
+
+    .article-body :global(h2) {
+      font-size: 1.5rem;
+    }
+
+    .article-body :global(p) {
+      font-size: 1rem;
+    }
+  }
+</style>

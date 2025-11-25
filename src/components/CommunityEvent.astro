@@ -1,0 +1,316 @@
+---
+/**
+ * CommunityEvent.astro
+ *
+ * Event card component for displaying community events.
+ * Shows event details, countdown timer, and RSVP button.
+ */
+
+interface Props {
+  title: string;
+  description: string;
+  date: string; // ISO 8601 format
+  type: 'tournament' | 'co-op-night' | 'challenge-run' | 'community-gathering' | 'stream-event';
+  participants?: number;
+}
+
+const { title, description, date, type, participants } = Astro.props;
+
+// Event type icons and colors
+const eventTypeConfig = {
+  tournament: { icon: '🏆', label: 'Tournament', color: '#ffd700' },
+  'co-op-night': { icon: '🎮', label: 'Co-op Night', color: '#00d9ff' },
+  'challenge-run': { icon: '⚔️', label: 'Challenge Run', color: '#9d4edd' },
+  'community-gathering': { icon: '🎉', label: 'Community Event', color: '#39ff14' },
+  'stream-event': { icon: '📺', label: 'Stream Event', color: '#a78bfa' }
+};
+
+const config = eventTypeConfig[type];
+
+// Format date
+const eventDate = new Date(date);
+const formattedDate = eventDate.toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric'
+});
+const formattedTime = eventDate.toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+  hour12: true
+});
+---
+
+<div class="community-event" data-event-date={date}>
+  <!-- Event Type Badge -->
+  <div class="event-type" style={`--event-color: ${config.color}`}>
+    <span class="event-icon">{config.icon}</span>
+    <span class="event-label">{config.label}</span>
+  </div>
+
+  <!-- Event Content -->
+  <div class="event-content">
+    <h3 class="event-title">{title}</h3>
+    <p class="event-description">{description}</p>
+
+    <!-- Event Details -->
+    <div class="event-details">
+      <div class="event-datetime">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>{formattedDate} at {formattedTime}</span>
+      </div>
+
+      {participants && (
+        <div class="event-participants">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span>{participants} Registered</span>
+        </div>
+      )}
+    </div>
+
+    <!-- Countdown Timer -->
+    <div class="event-countdown" data-countdown-target={date}>
+      <div class="countdown-display">
+        <span class="countdown-label">Starts in:</span>
+        <span class="countdown-timer">Calculating...</span>
+      </div>
+    </div>
+
+    <!-- RSVP Button -->
+    <button class="rsvp-btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      </svg>
+      RSVP to Event
+    </button>
+  </div>
+</div>
+
+<script>
+  // Countdown timer logic
+  function updateCountdowns() {
+    const countdownElements = document.querySelectorAll('[data-countdown-target]');
+
+    countdownElements.forEach((element) => {
+      const targetDate = element.getAttribute('data-countdown-target');
+      if (!targetDate) return;
+
+      const target = new Date(targetDate).getTime();
+      const now = new Date().getTime();
+      const distance = target - now;
+
+      const timerDisplay = element.querySelector('.countdown-timer');
+      if (!timerDisplay) return;
+
+      if (distance < 0) {
+        timerDisplay.textContent = 'Event has started!';
+        timerDisplay.classList.add('event-live');
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+      let countdownText = '';
+      if (days > 0) {
+        countdownText = `${days}d ${hours}h ${minutes}m`;
+      } else if (hours > 0) {
+        countdownText = `${hours}h ${minutes}m`;
+      } else {
+        countdownText = `${minutes}m`;
+      }
+
+      timerDisplay.textContent = countdownText;
+    });
+  }
+
+  // Update on page load
+  updateCountdowns();
+
+  // Update every minute
+  setInterval(updateCountdowns, 60000);
+</script>
+
+<style>
+  .community-event {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(157, 78, 221, 0.2);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    position: relative;
+  }
+
+  .community-event:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(157, 78, 221, 0.2);
+  }
+
+  /* Event Type Badge */
+  .event-type {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: linear-gradient(135deg, var(--event-color), transparent);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .event-icon {
+    font-size: 1.25rem;
+  }
+
+  .event-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+  }
+
+  /* Event Content */
+  .event-content {
+    padding: var(--spacing-lg);
+  }
+
+  .event-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+  }
+
+  .event-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+  }
+
+  /* Event Details */
+  .event-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .event-datetime,
+  .event-participants {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    color: var(--accent-purple);
+  }
+
+  /* Countdown Timer */
+  .event-countdown {
+    background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(0, 217, 255, 0.1));
+    border: 1px solid rgba(157, 78, 221, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .countdown-display {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    text-align: center;
+  }
+
+  .countdown-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .countdown-timer {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown-timer.event-live {
+    color: var(--accent-neon);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  /* RSVP Button */
+  .rsvp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .rsvp-btn .icon {
+    width: 20px;
+    height: 20px;
+    color: white;
+  }
+
+  .rsvp-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(157, 78, 221, 0.4);
+  }
+
+  .rsvp-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .event-content {
+      padding: var(--spacing-md);
+    }
+
+    .event-title {
+      font-size: 1.125rem;
+    }
+
+    .countdown-timer {
+      font-size: 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,353 @@
+---
+/*
+  GamesByGenre.astro - Explore by Genre Section
+
+  Large category cards for main game genres:
+  - Soulslikes
+  - RPGs
+  - Indie Games
+
+  Each card features:
+  - Icon/emoji
+  - Genre name
+  - Game count
+  - Description
+  - Gradient background
+  - Links to filtered game pages
+*/
+
+interface Genre {
+  name: string;
+  icon: string;
+  description: string;
+  gameCount: number;
+  gradientFrom: string;
+  gradientTo: string;
+  accentColor: string;
+  url: string;
+}
+
+const genres: Genre[] = [
+  {
+    name: "Soulslikes",
+    icon: "💀",
+    description: "Punishing combat, cryptic lore, and the satisfaction of overcoming impossible odds. Git gud or go hollow.",
+    gameCount: 24,
+    gradientFrom: "#1a0f0f",
+    gradientTo: "#2d1810",
+    accentColor: "var(--accent-cyan)",
+    url: "/games/soulslikes"
+  },
+  {
+    name: "RPGs",
+    icon: "🎭",
+    description: "Epic stories, deep character builds, and worlds that pull you in for hundreds of hours. Your choices matter.",
+    gameCount: 18,
+    gradientFrom: "#0f1a1a",
+    gradientTo: "#102d28",
+    accentColor: "var(--accent-purple)",
+    url: "/games/rpgs"
+  },
+  {
+    name: "Indie Gems",
+    icon: "💎",
+    description: "Hidden masterpieces crafted with passion. These small-team wonders prove you don't need AAA budgets to create magic.",
+    gameCount: 32,
+    gradientFrom: "#1a0f1a",
+    gradientTo: "#2d1028",
+    accentColor: "var(--accent-neon)",
+    url: "/games/indie"
+  }
+];
+---
+
+<section class="genres-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Explore by Genre</h2>
+      <p class="section-subtitle">Curated collections of the games I love</p>
+    </div>
+
+    <div class="genres-grid">
+      {genres.map((genre) => (
+        <article class="genre-card" style={`--gradient-from: ${genre.gradientFrom}; --gradient-to: ${genre.gradientTo}; --accent: ${genre.accentColor}`}>
+          <a href={genre.url} class="genre-link">
+            {/* Background decoration */}
+            <div class="card-bg-decoration"></div>
+
+            {/* Content */}
+            <div class="genre-content">
+              <div class="genre-icon">{genre.icon}</div>
+              <h3 class="genre-name">{genre.name}</h3>
+
+              <div class="game-count">
+                <span class="count-number">{genre.gameCount}</span>
+                <span class="count-label">Games</span>
+              </div>
+
+              <p class="genre-description">{genre.description}</p>
+
+              <div class="explore-button">
+                Explore Collection
+                <span class="arrow">→</span>
+              </div>
+            </div>
+
+            {/* Hover glow effect */}
+            <div class="hover-glow"></div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .genres-section {
+    padding: var(--spacing-2xl) 0;
+    position: relative;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  /* Genres Grid */
+  .genres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  /* Genre Card */
+  .genre-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .genre-link {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+  }
+
+  /* Background and Decoration */
+  .card-bg-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+    z-index: 1;
+  }
+
+  .genre-card:hover .card-bg-decoration {
+    border-width: 3px;
+    box-shadow: 0 0 40px var(--accent);
+  }
+
+  /* Content */
+  .genre-content {
+    position: relative;
+    z-index: 2;
+    padding: var(--spacing-2xl);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-md);
+  }
+
+  .genre-icon {
+    font-size: 5rem;
+    filter: drop-shadow(0 0 20px var(--accent));
+    animation: float 6s ease-in-out infinite;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .genre-name {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 30px var(--accent);
+    transition: all var(--transition-normal);
+  }
+
+  .genre-card:hover .genre-name {
+    color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  /* Game Count Badge */
+  .game-count {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--accent);
+    border-radius: 50px;
+    margin: var(--spacing-sm) 0;
+    transition: all var(--transition-normal);
+  }
+
+  .genre-card:hover .game-count {
+    background: var(--accent);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--accent);
+  }
+
+  .count-number {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .count-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .genre-card:hover .count-number,
+  .genre-card:hover .count-label {
+    color: var(--bg-primary);
+  }
+
+  /* Description */
+  .genre-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 1.05rem;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  /* Explore Button */
+  .explore-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 50px;
+    margin-top: auto;
+    transition: all var(--transition-normal);
+  }
+
+  .genre-card:hover .explore-button {
+    background: var(--accent);
+    color: var(--bg-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px var(--accent);
+  }
+
+  .arrow {
+    transition: transform var(--transition-normal);
+  }
+
+  .genre-card:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  /* Hover Glow Effect */
+  .hover-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--accent), transparent);
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    filter: blur(60px);
+    transition: opacity var(--transition-slow);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .genre-card:hover .hover-glow {
+    opacity: 0.3;
+  }
+
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 968px) {
+    .genres-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+
+    .genre-card {
+      min-height: 350px;
+    }
+
+    .genre-content {
+      padding: var(--spacing-xl);
+    }
+
+    .genre-icon {
+      font-size: 4rem;
+    }
+
+    .genre-name {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .genre-content {
+      padding: var(--spacing-lg);
+      gap: var(--spacing-sm);
+    }
+
+    .genre-icon {
+      font-size: 3rem;
+    }
+
+    .genre-name {
+      font-size: 1.75rem;
+    }
+
+    .genre-description {
+      font-size: 0.95rem;
+    }
+  }
+</style>

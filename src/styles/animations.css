@@ -1,0 +1,313 @@
+/**
+ * Scroll Animation Styles
+ * Performance-optimized animations using transform and opacity only
+ */
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+/* ========================================
+   SCROLL-TRIGGERED ANIMATION CLASSES
+   ======================================== */
+
+.animate-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: none;
+}
+
+.animate-on-scroll.animation-visible {
+  animation-duration: var(--animation-duration, 0.8s);
+  animation-timing-function: var(--animation-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  animation-delay: var(--animation-delay, 0ms);
+  animation-fill-mode: both;
+}
+
+/* Animation Direction Variants */
+.animate-on-scroll[data-animation-direction="up"].animation-visible {
+  animation-name: fadeInUp;
+}
+
+.animate-on-scroll[data-animation-direction="down"].animation-visible {
+  animation-name: fadeInDown;
+}
+
+.animate-on-scroll[data-animation-direction="left"].animation-visible {
+  animation-name: fadeInLeft;
+}
+
+.animate-on-scroll[data-animation-direction="right"].animation-visible {
+  animation-name: fadeInRight;
+}
+
+.animate-on-scroll[data-animation-direction="scale"].animation-visible {
+  animation-name: scaleIn;
+}
+
+.animate-on-scroll[data-animation-direction="fade"].animation-visible {
+  animation-name: fadeIn;
+}
+
+.animate-on-scroll[data-animation-direction="rotate"].animation-visible {
+  animation-name: rotateIn;
+}
+
+/* Default animation if no direction specified */
+.animate-on-scroll:not([data-animation-direction]).animation-visible {
+  animation-name: fadeInUp;
+}
+
+/* ========================================
+   PARALLAX CLASSES
+   ======================================== */
+
+.parallax {
+  will-change: transform;
+}
+
+.parallax-slow {
+  --parallax-speed: 0.3;
+}
+
+.parallax-medium {
+  --parallax-speed: 0.5;
+}
+
+.parallax-fast {
+  --parallax-speed: 0.8;
+}
+
+/* ========================================
+   STAGGER ANIMATIONS
+   ======================================== */
+
+.stagger-delay-100 { --animation-delay: 100ms; }
+.stagger-delay-200 { --animation-delay: 200ms; }
+.stagger-delay-300 { --animation-delay: 300ms; }
+.stagger-delay-400 { --animation-delay: 400ms; }
+.stagger-delay-500 { --animation-delay: 500ms; }
+.stagger-delay-600 { --animation-delay: 600ms; }
+.stagger-delay-700 { --animation-delay: 700ms; }
+.stagger-delay-800 { --animation-delay: 800ms; }
+
+/* Auto-stagger for children (use data-stagger-group on parent) */
+[data-stagger-group] .animate-on-scroll:nth-child(1) { --animation-delay: 0ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(2) { --animation-delay: 100ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(3) { --animation-delay: 200ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(4) { --animation-delay: 300ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(5) { --animation-delay: 400ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(6) { --animation-delay: 500ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(7) { --animation-delay: 600ms; }
+[data-stagger-group] .animate-on-scroll:nth-child(8) { --animation-delay: 700ms; }
+
+/* ========================================
+   ANIMATION DURATION VARIANTS
+   ======================================== */
+
+.animate-fast { --animation-duration: 0.4s; }
+.animate-normal { --animation-duration: 0.8s; }
+.animate-slow { --animation-duration: 1.2s; }
+.animate-very-slow { --animation-duration: 1.6s; }
+
+/* ========================================
+   ANIMATION EASING VARIANTS
+   ======================================== */
+
+.ease-smooth { --animation-easing: cubic-bezier(0.4, 0, 0.2, 1); }
+.ease-bounce { --animation-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+.ease-elastic { --animation-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.ease-out { --animation-easing: cubic-bezier(0, 0, 0.2, 1); }
+.ease-in-out { --animation-easing: cubic-bezier(0.4, 0, 0.6, 1); }
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Force GPU acceleration for smoother animations */
+.animate-on-scroll,
+.parallax {
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll,
+  .parallax {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    will-change: auto !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Instantly visible (skip animation) */
+.no-animation {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* Animation once (won't repeat on scroll up) */
+.animate-once.animation-visible {
+  animation-iteration-count: 1;
+}
+
+/* Keep final state after animation */
+.animate-persist {
+  animation-fill-mode: forwards;
+}
+
+/* ========================================
+   DEEP SPACE THEME SPECIFIC ANIMATIONS
+   ======================================== */
+
+@keyframes nebulaPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-200vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+.nebula-pulse {
+  animation: nebulaPulse 4s ease-in-out infinite;
+}
+
+.float-up {
+  animation: floatUp 15s ease-in-out infinite;
+}
+
+/* Hover enhancements for interactive elements */
+.animate-on-scroll.animation-visible:hover {
+  transform: translateY(-5px) scale(1.02);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glow effect for space theme */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.6), 0 0 60px rgba(138, 43, 226, 0.3);
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}

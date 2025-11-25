@@ -1,0 +1,284 @@
+---
+/*
+  Home Page - index.astro
+
+  This is the homepage for Tricky P Gaming.
+  An immersive, content-rich experience showcasing games, reviews, and articles.
+*/
+
+// Import our base layout
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Import all section components
+import FeaturedGame from '../components/sections/FeaturedGame.astro';
+import RecentReviews from '../components/sections/RecentReviews.astro';
+import GamesByGenre from '../components/sections/GamesByGenre.astro';
+import BlogPreview from '../components/sections/BlogPreview.astro';
+import About from '../components/sections/About.astro';
+---
+
+<BaseLayout title="Tricky P Gaming - Level Up Your Experience">
+  <!-- Hero Section - The first thing visitors see -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <!-- Brand name with gradient effect -->
+        <h1 class="brand-name">Tricky P Gaming</h1>
+
+        <!-- Tagline -->
+        <p class="tagline">Level Up Your Gaming Experience</p>
+
+        <!-- Description -->
+        <p class="hero-description">
+          Join me on epic adventures through the toughest games.
+          Soulslikes, RPGs, indie gems, and everything in between.
+        </p>
+
+        <!-- Quick stats -->
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Hours Played</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Games Reviewed</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">100+</span>
+            <span class="stat-label">Bosses Defeated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- Featured Game Section - What I'm currently playing -->
+  <FeaturedGame />
+
+  <!-- Recent Reviews Carousel - Latest game reviews -->
+  <RecentReviews />
+
+  <!-- Games by Genre - Explore curated collections -->
+  <GamesByGenre />
+
+  <!-- Blog Preview - Latest articles -->
+  <BlogPreview />
+
+  <!-- About Section - Who is Tricky P -->
+  <About />
+</BaseLayout>
+
+<style>
+  /*
+    Hero Section Styles
+  */
+
+  .hero {
+    /* Full viewport height */
+    min-height: 100vh;
+
+    /* Center content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Padding */
+    padding: var(--spacing-xl) 0;
+
+    /* Background with gradient */
+    background: linear-gradient(
+      135deg,
+      var(--bg-primary) 0%,
+      rgba(20, 27, 61, 0.8) 50%,
+      var(--bg-primary) 100%
+    );
+
+    /* Center text */
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .brand-name {
+    /* Large, responsive font size */
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-md);
+
+    /* Gradient text effect */
+    background: linear-gradient(
+      135deg,
+      var(--accent-cyan) 0%,
+      var(--accent-purple) 50%,
+      var(--accent-neon) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    /* Glow effect */
+    filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.3));
+
+    /* Animation */
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .tagline {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    letter-spacing: 0.02em;
+    animation: fadeInUp 1s ease-out 0.3s both;
+  }
+
+  .hero-description {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
+    animation: fadeInUp 1s ease-out 0.6s both;
+  }
+
+  /* Hero Stats */
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+    animation: fadeInUp 1s ease-out 0.9s both;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    background: rgba(0, 217, 255, 0.05);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+  }
+
+  .stat:hover {
+    background: rgba(0, 217, 255, 0.1);
+    border-color: rgba(0, 217, 255, 0.6);
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+  }
+
+  .stat-number {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Scroll Indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: var(--spacing-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--accent-cyan);
+    animation: bounce 2s ease-in-out infinite;
+    cursor: pointer;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(10px);
+    }
+  }
+
+  /* Hover effect on brand name */
+  .brand-name:hover {
+    filter: drop-shadow(0 0 40px rgba(0, 217, 255, 0.5));
+    transition: filter var(--transition-normal);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 80vh;
+      padding: var(--spacing-lg) 0;
+    }
+
+    .brand-name {
+      filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.2));
+    }
+
+    .hero-stats {
+      flex-direction: column;
+      gap: var(--spacing-md);
+      align-items: stretch;
+    }
+
+    .stat {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .scroll-indicator {
+      bottom: var(--spacing-lg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-stats {
+      gap: var(--spacing-sm);
+    }
+
+    .stat {
+      padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+    }
+  }
+</style>

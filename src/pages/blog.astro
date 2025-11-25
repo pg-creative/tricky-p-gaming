@@ -1,0 +1,432 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { blogPosts, getRecentPosts } from '../data/blogPosts';
+
+const allPosts = [...blogPosts].sort((a, b) =>
+  new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+
+const recentPosts = getRecentPosts(5);
+
+// Get all unique categories
+const categories = ['All', ...new Set(blogPosts.map(post => post.category))];
+
+// Get category counts for sidebar
+const categoryCounts = blogPosts.reduce((acc, post) => {
+  acc[post.category] = (acc[post.category] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+---
+
+<BaseLayout title="Blog - Tricky P Gaming">
+  <div class="blog-page min-h-screen">
+    {/* Hero Section */}
+    <section class="hero-section relative py-20 px-4 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-transparent"></div>
+
+      {/* Animated background elements */}
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="nebula-orb absolute top-20 -left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div class="nebula-orb absolute top-40 right-0 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"></div>
+        <div class="nebula-orb absolute -bottom-20 left-1/3 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-8">
+          <h1 class="text-5xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 animate-gradient">
+            All Articles
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Gaming tips, in-depth reviews, tutorials, and the latest news from the world of gaming
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* Main Content */}
+    <section class="content-section py-12 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Content Area */}
+          <div class="lg:col-span-3">
+            {/* Filter Component */}
+            <div id="blog-filter-container" class="mb-12" data-categories={JSON.stringify(categories)}>
+              {/* React component will hydrate here */}
+            </div>
+
+            {/* Blog Grid */}
+            <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {allPosts.map(post => (
+                <BlogCard
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  date={post.date}
+                  category={post.category}
+                  image={post.image}
+                  slug={post.slug}
+                  readTime={post.readTime}
+                  author={post.author}
+                />
+              ))}
+            </div>
+
+            {/* Pagination Placeholder */}
+            <div class="pagination mt-12 flex justify-center">
+              <div class="flex items-center gap-2">
+                <button class="pagination-btn px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700/50 text-gray-400 cursor-not-allowed" disabled>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                </button>
+
+                <button class="pagination-btn px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold">
+                  1
+                </button>
+
+                <button class="pagination-btn px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700/50 text-gray-300 hover:bg-gray-700/70 transition-all">
+                  2
+                </button>
+
+                <button class="pagination-btn px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700/50 text-gray-300 hover:bg-gray-700/70 transition-all">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <aside class="lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+              {/* Search Box */}
+              <div class="sidebar-card p-6 bg-gradient-to-br from-gray-900/60 to-gray-800/40 border border-purple-500/20 rounded-xl backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                  Search Articles
+                </h3>
+                <div class="relative">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    class="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-all"
+                  />
+                  <svg class="absolute right-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div class="sidebar-card p-6 bg-gradient-to-br from-gray-900/60 to-gray-800/40 border border-purple-500/20 rounded-xl backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                  </svg>
+                  Categories
+                </h3>
+                <ul class="space-y-2">
+                  {Object.entries(categoryCounts).map(([category, count]) => (
+                    <li>
+                      <a
+                        href="#"
+                        class="flex items-center justify-between py-2 px-3 rounded-lg text-gray-300 hover:bg-purple-500/10 hover:text-purple-300 transition-all group"
+                      >
+                        <span class="group-hover:translate-x-1 transition-transform">{category}</span>
+                        <span class="text-xs bg-purple-500/20 px-2 py-1 rounded-full">{count}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Recent Posts */}
+              <div class="sidebar-card p-6 bg-gradient-to-br from-gray-900/60 to-gray-800/40 border border-purple-500/20 rounded-xl backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Recent Posts
+                </h3>
+                <ul class="space-y-4">
+                  {recentPosts.map(post => (
+                    <li>
+                      <a href={`/blog/${post.slug}`} class="group">
+                        <h4 class="text-sm font-semibold text-gray-200 group-hover:text-purple-400 transition-colors line-clamp-2 mb-1">
+                          {post.title}
+                        </h4>
+                        <p class="text-xs text-gray-500">
+                          {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Newsletter Signup */}
+              <div class="sidebar-card p-6 bg-gradient-to-br from-purple-900/40 to-pink-900/20 border border-purple-500/30 rounded-xl backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-2">Stay Updated</h3>
+                <p class="text-sm text-gray-300 mb-4">Get the latest gaming content delivered to your inbox.</p>
+                <form class="space-y-3">
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    class="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 transition-all"
+                  />
+                  <button
+                    type="submit"
+                    class="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/30 transition-all"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  import { blogPosts } from '../data/blogPosts';
+  import BlogFilter from '../components/BlogFilter.tsx';
+  import { createElement } from 'react';
+  import { createRoot } from 'react-dom/client';
+
+  // Get the filter container
+  const filterContainer = document.getElementById('blog-filter-container');
+  const blogGrid = document.getElementById('blog-grid');
+
+  if (filterContainer && blogGrid) {
+    const categoriesData = filterContainer.getAttribute('data-categories');
+    const categories = categoriesData ? JSON.parse(categoriesData) : ['All'];
+
+    // Function to render blog posts
+    const renderPosts = (category: string) => {
+      const filteredPosts = category === 'All'
+        ? blogPosts
+        : blogPosts.filter(post => post.category === category);
+
+      // Sort by date
+      const sortedPosts = [...filteredPosts].sort((a, b) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+
+      // Create HTML for posts
+      blogGrid.innerHTML = sortedPosts.map(post => `
+        <article class="blog-card group">
+          <a href="/blog/${post.slug}" class="block h-full">
+            <div class="card-container h-full flex flex-col">
+              <div class="image-wrapper relative overflow-hidden rounded-t-xl h-48">
+                <div class="image-placeholder absolute inset-0 bg-gradient-to-br from-purple-900/50 to-blue-900/50 flex items-center justify-center">
+                  <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div class="absolute top-3 left-3 z-10">
+                  <span class="category-badge bg-gradient-to-r ${getCategoryColor(post.category)} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    ${post.category}
+                  </span>
+                </div>
+              </div>
+              <div class="card-content flex-1 flex flex-col p-5">
+                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300">
+                  ${post.title}
+                </h3>
+                <p class="text-gray-300 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
+                  ${post.excerpt}
+                </p>
+                <div class="meta-info flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-700/50">
+                  <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      <span>${new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <span>${post.readTime} min read</span>
+                    </div>
+                  </div>
+                  <div class="read-more flex items-center gap-1 text-purple-400 font-semibold group-hover:gap-2 transition-all duration-300">
+                    <span>Read</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+      `).join('');
+    };
+
+    // Helper function for category colors
+    const getCategoryColor = (category: string) => {
+      const colors: Record<string, string> = {
+        Tips: 'from-blue-500 to-cyan-500',
+        Reviews: 'from-purple-500 to-pink-500',
+        Tutorials: 'from-green-500 to-emerald-500',
+        News: 'from-orange-500 to-red-500'
+      };
+      return colors[category] || colors.Tips;
+    };
+
+    // Render React filter component
+    const root = createRoot(filterContainer);
+    root.render(
+      createElement(BlogFilter, {
+        categories: categories,
+        onFilterChange: renderPosts
+      })
+    );
+  }
+</script>
+
+<style>
+  .blog-page {
+    background: linear-gradient(to bottom, #0a0118, #1a0b2e);
+  }
+
+  .hero-section {
+    position: relative;
+  }
+
+  .nebula-orb {
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .nebula-orb:nth-child(2) {
+    animation-delay: -7s;
+    animation-duration: 25s;
+  }
+
+  .nebula-orb:nth-child(3) {
+    animation-delay: -14s;
+    animation-duration: 30s;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(30px, -30px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+  }
+
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+
+  .sidebar-card {
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-card:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Blog Card Styles (duplicated for client-side rendering) */
+  .blog-card {
+    position: relative;
+  }
+
+  .card-container {
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(20, 15, 50, 0.8) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-container:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow:
+      0 20px 40px rgba(139, 92, 246, 0.15),
+      0 0 30px rgba(139, 92, 246, 0.1);
+  }
+
+  .image-wrapper {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .blog-card:hover .image-wrapper {
+    transform: scale(1.05);
+  }
+
+  .category-badge {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  .blog-card:hover .category-badge {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-content {
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  }
+
+  .read-more {
+    transition: all 0.3s ease;
+  }
+
+  .blog-card:hover .read-more {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 1rem;
+    }
+
+    .hero-section h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

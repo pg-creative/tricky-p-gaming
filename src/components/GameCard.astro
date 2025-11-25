@@ -1,0 +1,102 @@
+---
+/* GameCard Component
+   A reusable card for displaying games in the showcase
+   Props:
+   - title: Game name
+   - description: Brief description or why PG plays it
+   - icon: Emoji representing the game (temporary until we add real images)
+*/
+
+interface Props {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+const { title, description, icon } = Astro.props;
+---
+
+<div class="game-card">
+  <div class="game-icon">{icon}</div>
+  <h3 class="game-title">{title}</h3>
+  <p class="game-description">{description}</p>
+</div>
+
+<style>
+  /* GameCard Styles
+     Each card has a dark surface background with a cyan border glow
+     On hover: lifts up and intensifies the glow effect */
+
+  .game-card {
+    /* Background and border */
+    background-color: var(--bg-surface);
+    border: 2px solid var(--accent-cyan);
+    border-radius: var(--radius-lg);
+
+    /* Spacing */
+    padding: var(--spacing-lg);
+
+    /* Subtle initial glow */
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
+
+    /* Smooth transitions for hover effects */
+    transition: transform var(--transition-normal),
+                box-shadow var(--transition-normal);
+
+    /* Make sure card takes full height in grid */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  /* Hover effect: lift up and intensify glow */
+  .game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0, 217, 255, 0.4),
+                0 5px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Game icon (emoji) - nice and big */
+  .game-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  /* Game title */
+  .game-title {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+    text-align: center;
+  }
+
+  /* Game description */
+  .game-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Responsive: Adjust spacing on smaller screens */
+  @media (max-width: 480px) {
+    .game-card {
+      padding: var(--spacing-md);
+    }
+
+    .game-icon {
+      font-size: 2.5rem;
+    }
+
+    .game-title {
+      font-size: 1.25rem;
+    }
+
+    .game-description {
+      font-size: 0.9rem;
+    }
+  }
+</style>

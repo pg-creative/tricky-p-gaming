@@ -1,0 +1,267 @@
+---
+/*
+  Header Component - Tricky P Gaming
+
+  This is an Astro component (static by default, no JavaScript sent to browser).
+  Features:
+  - Sticky navigation that stays at top when scrolling
+  - Responsive hamburger menu on mobile (CSS-only, no JS)
+  - Gaming aesthetic with glow effects on hover
+  - Accessible navigation with ARIA labels
+*/
+---
+
+<header class="site-header">
+  <nav class="nav-container" aria-label="Main navigation">
+    <div class="nav-content">
+      <!-- Logo/Brand - Links back to home -->
+      <a href="/" class="logo" aria-label="Tricky P Gaming home">
+        <img src="/logo.png" alt="Tricky P Gaming" class="logo-image" />
+      </a>
+
+      <!-- Hamburger checkbox (hidden but controls menu state on mobile) -->
+      <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu" />
+
+      <!-- Hamburger icon (visible only on mobile) -->
+      <label for="menu-toggle" class="hamburger" aria-label="Menu button">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </label>
+
+      <!-- Navigation links -->
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/games" class="nav-link">Games</a></li>
+        <li><a href="/content" class="nav-link">Content</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<style>
+  /*
+    Header Styles
+    Uses CSS variables from global.css for consistency
+  */
+
+  .site-header {
+    /* Sticky positioning - stays at top when scrolling */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    /* Glass morphism effect - semi-transparent with blur */
+    background: linear-gradient(
+      135deg,
+      rgba(10, 14, 39, 0.85) 0%,
+      rgba(20, 24, 59, 0.75) 100%
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    /* Subtle bottom border with cyan accent */
+    border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+
+    /* Enhanced shadow/glow to float above space background */
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 0 40px rgba(157, 78, 221, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+
+  .nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px; /* Fixed height for consistent header */
+  }
+
+  /* Logo Styles */
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    position: relative;
+  }
+
+  .logo-image {
+    height: 56px;
+    max-height: 56px;
+    width: auto;
+    transition: all var(--transition-normal);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  }
+
+  .logo:hover .logo-image {
+    /* Enhanced cosmic glow on hover */
+    filter:
+      drop-shadow(0 0 12px rgba(0, 217, 255, 0.5))
+      drop-shadow(0 0 20px rgba(157, 78, 221, 0.4))
+      drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* Responsive logo sizing */
+  @media (max-width: 768px) {
+    .logo-image {
+      height: 48px;
+      max-height: 48px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-image {
+      height: 42px;
+      max-height: 42px;
+    }
+  }
+
+  /* Hide hamburger menu toggle and checkbox by default */
+  .menu-toggle {
+    display: none;
+  }
+
+  .hamburger {
+    display: none; /* Hidden on desktop */
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+  }
+
+  .hamburger-line {
+    width: 28px;
+    height: 3px;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    border-radius: 2px;
+    transition: all var(--transition-normal);
+  }
+
+  /* Navigation Links */
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-lg);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    position: relative;
+  }
+
+  /* Hover effect with cosmic glow matching space theme */
+  .nav-link:hover {
+    color: var(--accent-cyan);
+    background: linear-gradient(
+      135deg,
+      rgba(0, 217, 255, 0.08) 0%,
+      rgba(157, 78, 221, 0.12) 100%
+    );
+    box-shadow:
+      0 0 20px rgba(157, 78, 221, 0.3),
+      0 0 10px rgba(0, 217, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  /* Active/current page indicator (can be enhanced with JavaScript later) */
+  .nav-link:focus {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 2px;
+  }
+
+  /*
+    Responsive Design - Mobile styles
+    Mobile-first approach: These styles apply on screens 768px and smaller
+  */
+  @media (max-width: 768px) {
+    /* Show hamburger menu on mobile */
+    .hamburger {
+      display: flex;
+    }
+
+    /* Navigation links - hidden by default on mobile */
+    .nav-links {
+      position: fixed;
+      top: 70px; /* Below header */
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background-color: var(--bg-surface);
+      padding: var(--spacing-md);
+
+      /* Border and shadow for depth */
+      border-top: 1px solid rgba(0, 217, 255, 0.2);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
+      /* Hidden by default */
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-normal);
+    }
+
+    /* Show menu when checkbox is checked (CSS-only toggle!) */
+    .menu-toggle:checked ~ .nav-links {
+      max-height: 400px; /* Enough height to show all links */
+    }
+
+    /* Animate hamburger icon when menu is open */
+    .menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(2) {
+      opacity: 0; /* Hide middle line */
+    }
+
+    .menu-toggle:checked ~ .hamburger .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(8px, -8px);
+    }
+
+    /* Mobile nav link styles */
+    .nav-link {
+      display: block;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-link:last-child {
+      border-bottom: none;
+    }
+  }
+
+  /* Tablet and larger screens - ensure nav is visible */
+  @media (min-width: 769px) {
+    .nav-links {
+      /* Reset any mobile overrides */
+      position: static;
+      max-height: none;
+      flex-direction: row;
+      background-color: transparent;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+    }
+  }
+</style>

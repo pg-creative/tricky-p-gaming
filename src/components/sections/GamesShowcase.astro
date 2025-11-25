@@ -1,0 +1,112 @@
+---
+/* GamesShowcase Section
+   Displays a grid of games that PG plays
+   Features:
+   - Responsive grid (3 columns desktop, 2 tablet, 1 mobile)
+   - Uses GameCard component for each game
+   - Showcases soulslikes, RPGs, and indie games
+*/
+
+import GameCard from '../GameCard.astro';
+---
+
+<section class="games-showcase section">
+  <div class="container">
+    <h2 class="section-heading">Games I Play</h2>
+
+    <div class="games-grid">
+      <!-- Soulslikes -->
+      <GameCard
+        icon="⚔️"
+        title="Elden Ring"
+        description="Epic open-world souls experience. Exploring the Lands Between, mastering brutal combat, and conquering legendary bosses."
+      />
+
+      <GameCard
+        icon="🔥"
+        title="Dark Souls III"
+        description="The pinnacle of souls combat. Perfecting parries, learning boss patterns, and diving deep into the lore."
+      />
+
+      <!-- RPGs -->
+      <GameCard
+        icon="🐺"
+        title="The Witcher 3"
+        description="Immersive storytelling at its finest. Following Geralt's journey through rich narratives and tough moral choices."
+      />
+
+      <GameCard
+        icon="🎲"
+        title="Baldur's Gate 3"
+        description="D&D brought to life. Crafting stories through tactical combat and meaningful character interactions."
+      />
+
+      <!-- Indie Gems -->
+      <GameCard
+        icon="🦋"
+        title="Hollow Knight"
+        description="Metroidvania perfection. Exploring Hallownest's haunting depths and mastering precision platforming."
+      />
+
+      <GameCard
+        icon="💀"
+        title="Hades"
+        description="Roguelike excellence. Escaping the Underworld one run at a time with addictive combat and incredible storytelling."
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Section spacing and layout */
+  .games-showcase {
+    background-color: var(--bg-primary);
+  }
+
+  /* Section heading - centered with gradient effect */
+  .section-heading {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* CSS Grid Layout
+     Creates a responsive grid that adapts to screen size
+     - Desktop: 3 columns
+     - Tablet: 2 columns
+     - Mobile: 1 column
+  */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns on desktop */
+    gap: var(--spacing-lg);
+    width: 100%;
+  }
+
+  /* Tablet breakpoint - 2 columns */
+  @media (max-width: 768px) {
+    .games-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-md);
+    }
+
+    .section-heading {
+      margin-bottom: var(--spacing-lg);
+    }
+  }
+
+  /* Mobile breakpoint - 1 column (stack vertically) */
+  @media (max-width: 480px) {
+    .games-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+
+    .section-heading {
+      margin-bottom: var(--spacing-md);
+    }
+  }
+</style>

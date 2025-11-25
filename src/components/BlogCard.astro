@@ -1,0 +1,175 @@
+---
+interface Props {
+  title: string;
+  excerpt: string;
+  date: string;
+  category: 'Tips' | 'Reviews' | 'Tutorials' | 'News';
+  image: string;
+  slug: string;
+  readTime: number;
+  author?: string;
+}
+
+const { title, excerpt, date, category, image, slug, readTime, author = 'Tricky P' } = Astro.props;
+
+// Category color mapping
+const categoryColors = {
+  Tips: 'from-blue-500 to-cyan-500',
+  Reviews: 'from-purple-500 to-pink-500',
+  Tutorials: 'from-green-500 to-emerald-500',
+  News: 'from-orange-500 to-red-500'
+};
+
+const categoryColor = categoryColors[category];
+
+// Format date
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+});
+---
+
+<article class="blog-card group">
+  <a href={`/blog/${slug}`} class="block h-full">
+    <div class="card-container h-full flex flex-col">
+      {/* Image Section */}
+      <div class="image-wrapper relative overflow-hidden rounded-t-xl h-48">
+        <div class="image-placeholder absolute inset-0 bg-gradient-to-br from-purple-900/50 to-blue-900/50 flex items-center justify-center">
+          <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+        {/* Category Badge */}
+        <div class="absolute top-3 left-3 z-10">
+          <span class={`category-badge bg-gradient-to-r ${categoryColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
+            {category}
+          </span>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div class="card-content flex-1 flex flex-col p-5">
+        {/* Title */}
+        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300">
+          {title}
+        </h3>
+
+        {/* Excerpt */}
+        <p class="text-gray-300 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
+          {excerpt}
+        </p>
+
+        {/* Meta Info */}
+        <div class="meta-info flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-700/50">
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <span>{formattedDate}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>{readTime} min read</span>
+            </div>
+          </div>
+
+          {/* Read More Arrow */}
+          <div class="read-more flex items-center gap-1 text-purple-400 font-semibold group-hover:gap-2 transition-all duration-300">
+            <span>Read</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .blog-card {
+    position: relative;
+  }
+
+  .card-container {
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(20, 15, 50, 0.8) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-container:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow:
+      0 20px 40px rgba(139, 92, 246, 0.15),
+      0 0 30px rgba(139, 92, 246, 0.1);
+  }
+
+  .image-wrapper {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .blog-card:hover .image-wrapper {
+    transform: scale(1.05);
+  }
+
+  .image-placeholder {
+    transition: opacity 0.3s ease;
+  }
+
+  .blog-card:hover .image-placeholder {
+    opacity: 0.9;
+  }
+
+  .category-badge {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  .blog-card:hover .category-badge {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-content {
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  }
+
+  /* Line clamp for excerpt */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .read-more {
+    transition: all 0.3s ease;
+  }
+
+  .blog-card:hover .read-more {
+    transform: translateX(4px);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card-content {
+      padding: 1rem;
+    }
+
+    .image-wrapper {
+      height: 12rem;
+    }
+  }
+</style>
